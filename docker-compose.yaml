@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_HOST: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./apps/backend/api/db/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    image: tstmaker/backend
+    environment:
+      POSTGRES_HOST: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - "database"
+    volumes:
+      - ./apps/backend:/app
+
+  # frontend:
+    # build:
+      # context: ./apps/frontend
+      # dockerfile: Dockerfile
+    # image: tstmaker/frontend
+    # ports:
+      # - "4200:4200"
+    # depends_on:
+      # - "database"
+    # volumes:
+      # - /app/node_modules
+      # - ./apps/frontend:/app

@@ -1,0 +1,5 @@
+<div class="table w-full">
+  @for (exercise of exercises; track $index) {
+    <app-exercise class="table-row" [id]="exercise.id" [name]="exercise.name" [description]="exercise.description" [dateModified]="exercise.dateModified" [code]="exercise.code" />
+  }
+</div>
