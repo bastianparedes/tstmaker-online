@@ -6,7 +6,7 @@ name = "pypi"
 [scripts]
 dev = "python api/dev.py"
 lint = "flake8 --append-config pyproject.toml"
-lint_fix = 'autopep8 --recursive --in-place .'
+lint_fix = 'autopep8 .'
 test = "pytest"
 
 [packages]
