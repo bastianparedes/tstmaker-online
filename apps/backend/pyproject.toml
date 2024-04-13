@@ -2,6 +2,9 @@
 max-line-length = 200
 indent-size = 2
 exclude = "Definiciones.py"
+in-place = true
+recursive = true
+aggressive = 3
 
 [tool.flake8]
 max-line-length = 200
