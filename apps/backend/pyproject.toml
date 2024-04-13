@@ -1,12 +1,12 @@
 [tool.autopep8]
 max-line-length = 200
 indent-size = 2
-exclude = ["Definiciones.py"]
+exclude = "Definiciones.py"
 
 [tool.flake8]
 max-line-length = 200
 indent-size = 2
-exclude = ["Definiciones.py"]
+exclude = "Definiciones.py"
 
 [tool.pytest.ini_options]
 addopts = "-ra -q"
