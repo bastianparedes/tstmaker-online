@@ -1,8 +1,9 @@
 from api.classes.Latex import Latex
+from api.classes.Abstract import Numeric
 from typing import Union
 
 
-class Rational:
+class Rational(Numeric):
   '''
     numerator: Union[int, float]
     denominator: Union[int, float]
@@ -107,7 +108,7 @@ class Rational:
   def get_numerator(self):
     print('AYUDA get_numerator')
     return self.__numerator
-  
+
   def get_denominator(self):
     print('AYUDA get_denominator')
     return self.__denominator
