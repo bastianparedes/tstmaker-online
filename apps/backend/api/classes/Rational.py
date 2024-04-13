@@ -1,6 +1,7 @@
 import Latex
 from typing import Union
 
+
 class Rational:
   '''
     numerator: Union[int, float]
