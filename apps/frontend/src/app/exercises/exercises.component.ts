@@ -17,7 +17,7 @@ export class ExercisesComponent implements OnInit {
   httpClient = inject(HttpClient)
   ngOnInit() {
     this.httpClient.get('/api/exercises').subscribe((data) => {
-      this.exercises = data as any
+      this.exercises = data as Exercise[];
     });
   }
 }
