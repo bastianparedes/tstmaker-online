@@ -12,16 +12,20 @@ def getFullExercises():
     # print('AYUDA', flask.request.args)
     query = db.Exercise.select(
         db.Exercise.id,
+        db.Exercise.name,
         db.Exercise.description,
-        db.Exercise.code).where(
-        db.Exercise.code != '').order_by(
+        db.Exercise.code,
+        db.Exercise.last_modified_date
+      ).order_by(
         db.Exercise.id)
     exercises = []
     for exercise in query:
       exercises.append({
           "id": exercise.id,
-          "desctiption": exercise.description,
-          "code": exercise.code
+          "name": exercise.name,
+          "description": exercise.description,
+          "code": exercise.code,
+          "last_modified_date": exercise.last_modified_date
       })
     return exercises
 
