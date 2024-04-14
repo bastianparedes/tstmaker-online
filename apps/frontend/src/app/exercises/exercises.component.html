@@ -13,7 +13,7 @@
       @for (exercise of exercises; track $index) {
         <tr>
           <td class="p-5"><span>{{ exercise.id }}</span></td>
-          <td class="p-5"><input type="text" value="{{ exercise.name }}"/></td>
+          <td class="p-5"><span> {{ exercise.name }}</span></td>
           <td class="p-5"><span>{{ exercise.description }}</span></td>
           <td class="p-5">
             <span>{{ exercise.last_modified_date }}</span>
