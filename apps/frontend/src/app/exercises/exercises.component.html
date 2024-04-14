@@ -1,7 +1,26 @@
-<div class="table w-full">
-  @if (exercises !== undefined) {
-    @for (exercise of exercises; track $index) {
-      <app-exercise class="table-row" [id]="exercise.id" [name]="exercise.name" [description]="exercise.description" [last_modified_date]="exercise.last_modified_date" [code]="exercise.code" />
-    }
-  }
-</div>
+@if (exercises !== undefined) {
+  <table class="text-left">
+    <thead>
+      <tr>
+        <th class="p-5">ID</th>
+        <th class="p-5">Name</th>
+        <th class="p-5">Description</th>
+        <th class="p-5">Date</th>
+        <th class="p-5">Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (exercise of exercises; track $index) {
+        <tr>
+          <td class="p-5"><span>{{ exercise.id }}</span></td>
+          <td class="p-5"><input type="text" value="{{ exercise.name }}"/></td>
+          <td class="p-5"><span>{{ exercise.description }}</span></td>
+          <td class="p-5">
+            <span>{{ exercise.last_modified_date }}</span>
+          </td>
+          <td class="p-5"><button type="text" (click)="openCode(exercise.id)">Edit code</button></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
