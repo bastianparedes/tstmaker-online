@@ -71,7 +71,7 @@ def getSpecificExercise(id: int):
       ).where(
         db.Exercise.id == id
       ).order_by(
-        db.Exercise.id)
+        db.Exercise.id).limit(1)
     exercises = []
     for exercise in query:
       exercises.append({
@@ -81,7 +81,8 @@ def getSpecificExercise(id: int):
           "code": exercise.code,
           "last_modified_date": exercise.last_modified_date
       })
-    return exercises
+    if len(exercises) != 1: flask.abort(404, {})
+    return exercises[0]
 
   elif (flask.request.method == 'PUT'):
     request_data = flask.request.get_json()
@@ -96,16 +97,6 @@ def getSpecificExercise(id: int):
     return None
 
   return None
-
-
-@app.route('/api', methods=['GET'])
-def api():
-  return 'HOLA MUNDO DESDE /api'
-
-
-@app.route('/api/home', methods=['GET'])
-def api_home():
-  return 'HOLA MUNDO DESDE /api/home'
 
 
 @app.route('/api/pdf_url', methods=['POST'])

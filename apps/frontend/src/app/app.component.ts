@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { ExercisesComponent } from './exercises/exercises.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ExercisesComponent],
+  imports: [ExercisesComponent, RouterOutlet],
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'frontend';
-  toggleValue = true;
-  toggleChanged() {
-    console.log('TOGGLE CLICK');
-  }
 }
