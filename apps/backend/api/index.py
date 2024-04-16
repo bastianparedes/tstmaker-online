@@ -3,10 +3,10 @@ import requests
 import datetime
 import db
 
-app = flask.Flask(__name__)
+server = flask.Flask(__name__)
 
 
-@app.route('/api/exercises', methods=['GET', 'POST'])
+@server.route('/api/exercises', methods=['GET', 'POST'])
 def getFullExercises():
   if (flask.request.method == 'GET'):
     # print('AYUDA', flask.request.args)
@@ -59,7 +59,7 @@ def getFullExercises():
 
   return None
 
-@app.route('/api/exercises/<int:id>', methods=['GET', 'PUT'])
+@server.route('/api/exercises/<int:id>', methods=['GET', 'PUT'])
 def getSpecificExercise(id: int):
   if (flask.request.method == 'GET'):
     query = db.Exercise.select(
@@ -99,7 +99,7 @@ def getSpecificExercise(id: int):
   return None
 
 
-@app.route('/api/pdf_url', methods=['POST'])
+@server.route('/api/pdf_url', methods=['POST'])
 def pdf_url():
   request_data = flask.request.get_json()
   latex_code = request_data['latex_code']
