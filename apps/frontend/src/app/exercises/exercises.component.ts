@@ -13,14 +13,11 @@ import type { Exercise } from '../../types/Exercise';
 export class ExercisesComponent implements OnInit {
   displayedColumns = ['id', 'name', 'description', 'dateModified', 'code'];
   exercises: Exercise[]  | undefined = undefined;
-  httpClient = inject(HttpClient)
+  httpClient = inject(HttpClient);
+
   ngOnInit() {
     this.httpClient.get('/api/exercises').subscribe((data) => {
       this.exercises = data as Exercise[];
     });
-  }
-  openCode(id: number) {
-    const exercise = this.exercises?.find((exercise) => exercise.id === id);
-    console.log(exercise);
   }
 }

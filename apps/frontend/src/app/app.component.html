@@ -1,2 +1,18 @@
-<aside class="fixed"></aside>
-<router-outlet></router-outlet>
+<div class="flex">
+  <aside>
+    <nav class="">
+      <ul>
+        <li>
+          <a href="/exercises"><mat-icon class="text-4xl">home</mat-icon></a>
+        </li>
+        <li>
+          <a href="/createTest"><mat-icon>select_check_box</mat-icon></a>
+        </li>
+        <li></li>
+      </ul>
+    </nav>
+  </aside>
+  <main>
+    <router-outlet />
+  </main>
+</div>

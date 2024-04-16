@@ -4,5 +4,6 @@ import { ExerciseComponent } from './exercise/exercise.component';
 
 export const routes: Routes = [
   { path: 'exercises', component: ExercisesComponent },
-  { path: 'exercise', component: ExerciseComponent },
+  { path: 'exercises/:id', component: ExerciseComponent },
+  { path: '', component: ExercisesComponent },
 ];
