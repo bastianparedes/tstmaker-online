@@ -1,16 +1,16 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
-import type { Exercise } from '../../types/Exercise';
+import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
 @Component({
-  selector: 'app-exercise',
+  selector: 'app-edit-exercise',
   standalone: true,
   imports: [HttpClientModule, RouterLink],
-  templateUrl: './exercise.component.html',
+  templateUrl: './edit-exercise.component.html',
 })
-export class ExerciseComponent implements OnInit {
+export class EditExerciseComponent implements OnInit {
   @Input() id!: string;
   exercise: Exercise  | undefined = undefined;
   httpClient = inject(HttpClient)

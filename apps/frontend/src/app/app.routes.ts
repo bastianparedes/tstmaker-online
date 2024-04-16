@@ -1,9 +1,10 @@
 import type { Routes } from '@angular/router';
-import { ExercisesComponent } from './exercises/exercises.component';
-import { ExerciseComponent } from './exercise/exercise.component';
+import { AllExercisesComponent } from './exercises/all-exercises/all-exercises.component';
+import { EditExerciseComponent } from './exercises/edit-exercise/edit-exercise.component';
+import { NewExerciseComponent } from './exercises/new-exercise/new-exercise.component';
 
 export const routes: Routes = [
-  { path: 'exercises', component: ExercisesComponent },
-  { path: 'exercises/:id', component: ExerciseComponent },
-  { path: '', component: ExercisesComponent },
+  { path: 'exercises', component: AllExercisesComponent },
+  { path: 'exercises/edit/:id', component: EditExerciseComponent },
+  { path: 'exercises/new', component: NewExerciseComponent },
 ];
