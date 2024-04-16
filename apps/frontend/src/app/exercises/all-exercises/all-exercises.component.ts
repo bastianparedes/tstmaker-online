@@ -11,12 +11,13 @@ import type { Exercise } from '../../../types/Exercise';
   imports: [MatTableModule, MatCheckboxModule, HttpClientModule],
 })
 export class AllExercisesComponent implements OnInit {
-  displayedColumns = ['id', 'name', 'description', 'dateModified', 'code'];
+  displayedColumns = ['id', 'name', 'description', 'last_modified_date', 'code'];
   exercises: Exercise[]  | undefined = undefined;
   httpClient = inject(HttpClient);
 
   ngOnInit() {
     this.httpClient.get('/api/exercises').subscribe((data) => {
+      console.log(data);
       this.exercises = data as Exercise[];
     });
   }
