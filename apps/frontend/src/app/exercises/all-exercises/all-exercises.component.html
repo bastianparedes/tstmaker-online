@@ -1,26 +1,28 @@
-@if (exercises !== undefined) {
-  <table class="text-left">
-    <thead>
-      <tr>
-        <th class="p-5">ID</th>
-        <th class="p-5">Name</th>
-        <th class="p-5">Description</th>
-        <th class="p-5">Date</th>
-        <th class="p-5">Code</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (exercise of exercises; track $index) {
+<div class="flex justify-center">
+  @if (exercises !== undefined) {
+    <table class="text-left">
+      <thead>
         <tr>
-          <td class="p-5"><span>{{ exercise.id }}</span></td>
-          <td class="p-5"><span> {{ exercise.name }}</span></td>
-          <td class="p-5"><span>{{ exercise.description }}</span></td>
-          <td class="p-5">
-            <span>{{ exercise.last_modified_date }}</span>
-          </td>
-          <td class="p-5"><a href="/exercises/edit/{{exercise.id}}">Edit code</a></td>
+          <th class="p-5">ID</th>
+          <th class="p-5">Name</th>
+          <th class="p-5">Description</th>
+          <th class="p-5">Date</th>
+          <th class="p-5">Code</th>
         </tr>
-      }
-    </tbody>
-  </table>
-}
+      </thead>
+      <tbody>
+        @for (exercise of exercises; track $index) {
+          <tr>
+            <td class="p-5"><span>{{ exercise.id }}</span></td>
+            <td class="p-5"><span> {{ exercise.name }}</span></td>
+            <td class="p-5"><span>{{ exercise.description }}</span></td>
+            <td class="p-5">
+              <span>{{ exercise.last_modified_date }}</span>
+            </td>
+            <td class="p-5"><a href="/exercises/edit/{{exercise.id}}">Edit code</a></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

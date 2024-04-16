@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-edit-exercise',
   standalone: true,
-  imports: [HttpClientModule, RouterLink],
+  imports: [HttpClientModule, MatInputModule, MatFormFieldModule],
   templateUrl: './edit-exercise.component.html',
 })
 export class EditExerciseComponent implements OnInit {
@@ -26,5 +27,10 @@ export class EditExerciseComponent implements OnInit {
       .subscribe((data) => {
         this.exercise = data as Exercise;
       });
+  }
+
+  save(event: SubmitEvent) {
+    event.preventDefault();
+    console.log('SUBMIT', this.exercise);
   }
 }
