@@ -3,7 +3,7 @@ import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { CodeEditorModule } from '@ngstack/code-editor';
 
 @Component({

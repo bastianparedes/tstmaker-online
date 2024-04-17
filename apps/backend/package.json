@@ -10,7 +10,8 @@
     "dev": "python api/dev.py",
     "lint": "flake8 --append-config pyproject.toml",
     "lint:fix": "autopep8 .",
-    "test": "pytest"
+    "test": "pytest",
+    "install": "pip install -r requirements.txt"
   },
   "author": "",
   "license": "ISC"
