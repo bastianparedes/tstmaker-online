@@ -16,6 +16,10 @@
     "test": {
       "cache": false,
       "persistent": false
+    },
+    "_install": {
+      "cache": false,
+      "persistent": false
     }
   }
 }
