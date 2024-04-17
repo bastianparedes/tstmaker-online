@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
-    importProvidersFrom(MonacoEditorModule.forRoot())
+    importProvidersFrom(MonacoEditorModule.forRoot()),
   ],
 };

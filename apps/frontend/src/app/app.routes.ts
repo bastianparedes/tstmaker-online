@@ -7,4 +7,5 @@ export const routes: Routes = [
   { path: 'exercises', component: AllExercisesComponent },
   { path: 'exercises/edit/:id', component: EditExerciseComponent },
   { path: 'exercises/new', component: NewExerciseComponent },
+  { path: '', redirectTo: 'exercises', pathMatch: 'full' },
 ];
