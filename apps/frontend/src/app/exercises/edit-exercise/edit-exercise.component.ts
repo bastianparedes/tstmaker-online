@@ -4,11 +4,17 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { EditorComponent } from '../common/editor/editor.component';
 
 @Component({
   selector: 'app-edit-exercise',
   standalone: true,
-  imports: [HttpClientModule, MatInputModule, MatFormFieldModule],
+  imports: [
+    HttpClientModule,
+    MatInputModule,
+    MatFormFieldModule,
+    EditorComponent,
+  ],
   templateUrl: './edit-exercise.component.html',
 })
 export class EditExerciseComponent implements OnInit {
