@@ -1,11 +1,13 @@
 import ast
 
+
 def has_imports(code_str: str):
   tree = ast.parse(code_str)
   for node in ast.walk(tree):
     if isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
       return True
   return False
+
 
 def has_exec(code_str: str):
   tree = ast.parse(code_str)
@@ -14,6 +16,7 @@ def has_exec(code_str: str):
       return True
   return False
 
+
 def has_eval(code_str: str):
   tree = ast.parse(code_str)
   for node in ast.walk(tree):
@@ -21,13 +24,13 @@ def has_eval(code_str: str):
       return True
   return False
 
+
 def has_print(code_str: str):
   tree = ast.parse(code_str)
   for node in ast.walk(tree):
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == 'print':
       return True
   return False
-
 
 
 def code_is_valid(code_str: str):

@@ -2,6 +2,9 @@
   "name": "tstmaker-online",
   "scripts": {
     "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
     "install": "turbo run install"
   },
   "workspaces": [

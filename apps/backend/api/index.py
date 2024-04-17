@@ -16,7 +16,7 @@ def getFullExercises():
         db.Exercise.description,
         db.Exercise.code,
         db.Exercise.last_modified_date
-      ).order_by(
+    ).order_by(
         db.Exercise.id)
     exercises = []
     for exercise in query:
@@ -59,6 +59,7 @@ def getFullExercises():
 
   return None
 
+
 @server.route('/api/exercises/<int:id>', methods=['GET', 'PUT'])
 def getSpecificExercise(id: int):
   if (flask.request.method == 'GET'):
@@ -68,9 +69,9 @@ def getSpecificExercise(id: int):
         db.Exercise.description,
         db.Exercise.code,
         db.Exercise.last_modified_date
-      ).where(
+    ).where(
         db.Exercise.id == id
-      ).order_by(
+    ).order_by(
         db.Exercise.id).limit(1)
     exercises = []
     for exercise in query:
@@ -81,7 +82,8 @@ def getSpecificExercise(id: int):
           "code": exercise.code,
           "last_modified_date": exercise.last_modified_date
       })
-    if len(exercises) != 1: flask.abort(404, {})
+    if len(exercises) != 1:
+      flask.abort(404, {})
     return exercises[0]
 
   elif (flask.request.method == 'PUT'):

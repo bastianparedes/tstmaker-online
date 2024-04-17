@@ -4,6 +4,18 @@
     "dev": {
       "cache": false,
       "persistent": false
+    },
+    "lint": {
+      "cache": false,
+      "persistent": false
+    },
+    "lint:fix": {
+      "cache": false,
+      "persistent": false
+    },
+    "test": {
+      "cache": false,
+      "persistent": false
     }
   }
 }
