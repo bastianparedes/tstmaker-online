@@ -5,12 +5,18 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "test": "turbo run test",
-    "_install": "turbo run install"
+    "yarn-install": "cd apps/frontend ; yarn install ; cd ../backend ; npm run python-install"
   },
-  "workspaces": [
-    "apps/*"
-  ],
+  "workspaces": {
+    "packages":[
+      "apps/*"
+    ],
+    "nohoist": [
+      "**"
+    ]
+  },
   "devDependencies": {
     "turbo": "^1.13.0"
-  }
+  },
+  "private": true
 }
