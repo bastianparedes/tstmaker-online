@@ -3,12 +3,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import type { Exercise } from '../../../types/Exercise';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-all-exercises',
   templateUrl: './all-exercises.component.html',
   standalone: true,
-  imports: [MatTableModule, MatCheckboxModule, HttpClientModule],
+  imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule],
 })
 export class AllExercisesComponent implements OnInit {
   displayedColumns = [
@@ -23,8 +24,14 @@ export class AllExercisesComponent implements OnInit {
 
   ngOnInit() {
     this.httpClient.get('/api/exercises').subscribe((data) => {
-      console.log(data);
       this.exercises = data as Exercise[];
+      this.exercises.forEach((exercise) => {
+        const date = new Date(exercise.last_modified_date);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        exercise.last_modified_date = `${day}/${month}/${year}`;
+      });
     });
   }
 }
