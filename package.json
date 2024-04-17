@@ -1,0 +1,12 @@
+{
+  "name": "tstmaker-online",
+  "scripts": {
+    "dev": "turbo run dev"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "turbo": "^1.13.0"
+  }
+}

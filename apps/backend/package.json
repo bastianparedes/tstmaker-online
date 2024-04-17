@@ -1,5 +1,17 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
   "engines": {
     "node": "18.x"
-  }
+  },
+  "main": "index.js",
+  "scripts": {
+    "dev": "python api/dev.py",
+    "lint": "flake8 --append-config pyproject.toml",
+    "lint:fix": "autopep8 .",
+    "test": "pytest"
+  },
+  "author": "",
+  "license": "ISC"
 }

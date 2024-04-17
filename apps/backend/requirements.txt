@@ -1,0 +1,9 @@
+flask==3.0.2; python_version >= '3.8'
+requests==2.31.0; python_version >= '3.7'
+peewee==3.17.1
+psycopg2-binary==2.9.9; python_version >= '3.7'
+python-dotenv==1.0.1; python_version >= '3.8'
+autopep8==2.1.0; python_version >= '3.8'
+flake8==7.0.0; python_full_version >= '3.8.1'
+flake8-pyproject==1.2.3; python_version >= '3.6'
+pytest==8.1.1; python_version >= '3.8'
