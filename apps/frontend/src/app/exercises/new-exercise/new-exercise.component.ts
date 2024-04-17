@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './new-exercise.component.html',
 })
-export class NewExerciseComponent {
-
-}
+export class NewExerciseComponent {}

@@ -3,8 +3,7 @@ import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { CodeEditorModule } from '@ngstack/code-editor';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-edit-exercise',
@@ -14,11 +13,12 @@ import { CodeEditorModule } from '@ngstack/code-editor';
 })
 export class EditExerciseComponent implements OnInit {
   @Input() id!: string;
-  exercise: Exercise  | undefined = undefined;
-  httpClient = inject(HttpClient)
+  exercise: Exercise | undefined = undefined;
+  httpClient = inject(HttpClient);
 
   ngOnInit() {
-    this.httpClient.get(`/api/exercises/${this.id}`)
+    this.httpClient
+      .get(`/api/exercises/${this.id}`)
       .pipe(
         catchError(() => {
           location.href = '/exercises';

@@ -10,7 +10,7 @@ db = peewee.PostgresqlDatabase(
     host=os.environ.get('DATABASE_HOST', 'localhost'),
     port=os.environ.get('DATABASE_PORT', 5432),
     user=os.environ.get('DATABASE_USER', 'postgres'),
-    password=os.environ.get('DATABASE_PASSWORD', '12345'), # windows 12345, mac 12345678
+    password=os.environ.get('DATABASE_PASSWORD', '12345678'), # windows 12345, mac 12345678
 )
 
 

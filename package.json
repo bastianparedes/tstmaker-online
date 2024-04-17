@@ -1,7 +1,8 @@
 {
   "name": "tstmaker-online",
   "scripts": {
-    "dev": "turbo run dev"
+    "dev": "turbo run dev",
+    "install": "turbo run install"
   },
   "workspaces": [
     "apps/*"

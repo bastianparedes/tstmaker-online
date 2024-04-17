@@ -1,4 +1,16 @@
-{
+const prettier = {
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "semi": true,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "trailingComma": "es5",
+  "bracketSameLine": true,
+  "printWidth": 80
+}
+
+module.exports = {
   "root": true,
   "ignorePatterns": [
     "projects/**/*"
@@ -12,9 +24,11 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
       ],
       "rules": {
+        
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -30,18 +44,26 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "prettier/prettier": [
+          "error",
+          prettier     
+        ],
       }
     },
     {
       "files": [
         "*.html"
       ],
+      "excludedFiles": ["*inline-template-*.component.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
-        "plugin:@angular-eslint/template/accessibility"
+        "plugin:@angular-eslint/template/accessibility",
+        "plugin:prettier/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "prettier/prettier": ["error", { ...prettier, "parser": "angular" }]
+      }
     }
   ]
 }

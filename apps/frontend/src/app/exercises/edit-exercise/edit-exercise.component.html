@@ -2,18 +2,19 @@
   <form class="w-full" (submit)="save($event)">
     <mat-form-field class="w-full">
       <mat-label>Name</mat-label>
-      <input matInput placeholder="Exercise {{ exercise.id }}" [value]="exercise.name">
+      <input
+        matInput
+        placeholder="Exercise {{ exercise.id }}"
+        [value]="exercise.name" />
     </mat-form-field>
-  
+
     <mat-form-field class="w-full">
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Description exercise {{ exercise.id }}"></textarea>
+      <textarea
+        matInput
+        placeholder="Description exercise {{ exercise.id }}"></textarea>
     </mat-form-field>
   </form>
-
-
-}
-
-@else {
+} @else {
   <h1>Loading</h1>
 }

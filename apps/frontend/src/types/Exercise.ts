@@ -4,8 +4,6 @@ type Exercise = {
   code: string;
   description: string;
   last_modified_date: string;
-}
+};
 
-export {
-  Exercise
-}
+export { Exercise };

@@ -11,8 +11,14 @@ import type { Exercise } from '../../../types/Exercise';
   imports: [MatTableModule, MatCheckboxModule, HttpClientModule],
 })
 export class AllExercisesComponent implements OnInit {
-  displayedColumns = ['id', 'name', 'description', 'last_modified_date', 'code'];
-  exercises: Exercise[]  | undefined = undefined;
+  displayedColumns = [
+    'id',
+    'name',
+    'description',
+    'last_modified_date',
+    'code',
+  ];
+  exercises: Exercise[] | undefined = undefined;
   httpClient = inject(HttpClient);
 
   ngOnInit() {
