@@ -1,0 +1,8 @@
+<div style="height:400px;border:1px solid silver">
+  <ngx-monaco-editor
+    [options]="editorOptions"
+    (onInit)="onEditorInit($event)"
+    style="height: 100%"
+    (change)="onChange($event)"
+  />
+</div>
