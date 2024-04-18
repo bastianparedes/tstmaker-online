@@ -4,7 +4,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 import { EditorComponent } from '../common/editor/editor.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-exercise',
@@ -14,6 +16,8 @@ import { EditorComponent } from '../common/editor/editor.component';
     MatInputModule,
     MatFormFieldModule,
     EditorComponent,
+    MatButtonModule,
+    FormsModule,
   ],
   templateUrl: './edit-exercise.component.html',
 })
@@ -34,6 +38,21 @@ export class EditExerciseComponent implements OnInit {
       .subscribe((data) => {
         this.exercise = data as Exercise;
       });
+  }
+
+  updateName(newName: string) {
+    if (this.exercise === undefined) return;
+    this.exercise.name = newName;
+  }
+
+  updateDescription(newDescription: string) {
+    if (this.exercise === undefined) return;
+    this.exercise.description = newDescription;
+  }
+
+  updateCode(newCode: string) {
+    if (this.exercise === undefined) return;
+    this.exercise.code = newCode;
   }
 
   save(event: SubmitEvent) {

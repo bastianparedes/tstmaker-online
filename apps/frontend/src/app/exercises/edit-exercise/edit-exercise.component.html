@@ -5,17 +5,26 @@
       <input
         matInput
         placeholder="Exercise {{ exercise.id }}"
-        [value]="exercise.name" />
+        name="name"
+        [(ngModel)]="exercise.name"
+        (ngModelChange)="updateName($event)" />
     </mat-form-field>
 
     <mat-form-field class="w-full">
       <mat-label>Description</mat-label>
       <textarea
         matInput
-        placeholder="Description exercise {{ exercise.id }}"></textarea>
+        placeholder="Description exercise {{ exercise.id }}"
+        name="description"
+        [(ngModel)]="exercise.description"
+        (ngModelChange)="updateDescription($event)"></textarea>
     </mat-form-field>
 
-    <app-editor />
+    <app-editor [code]="exercise.code" />
+    <div class="flex gap-5 mt-5">
+      <button mat-flat-button color="accent" class="mt-5">Save</button>
+      <a mat-flat-button color="warn" class="mt-5" href="/exercises">Cancel</a>
+    </div>
   </form>
 } @else {
   <h1>Loading</h1>

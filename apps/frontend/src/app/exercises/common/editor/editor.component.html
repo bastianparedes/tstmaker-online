@@ -1,12 +1,13 @@
 <div class="h-96 border-2 border-solid">
   <ngx-monaco-editor
-    class="w-full h-full"
+    style="width: 100%; height: 100%"
     [options]="{
       theme: 'vs-light',
       language: 'python',
       wordWrap: 'on',
-      automaticLayout: true
+      tabSize: 2,
+      minimap: { enabled: false }
     }"
     (change)="onChange($event)"
-    ngModel="print('hola mundo')" />
+    [ngModel]="code" />
 </div>

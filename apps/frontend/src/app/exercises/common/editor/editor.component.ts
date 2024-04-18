@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 
@@ -20,9 +20,13 @@ import 'zone.js';
   templateUrl: './editor.component.html',
 })
 export class EditorComponent {
-  code = '';
+  @Input() code = '';
 
-  public onChange(event: Event) {
+  updateCode(newCode: string) {
+    console.log(newCode);
+  }
+
+  onChange(event: Event) {
     const target = event.target as HTMLTextAreaElement;
     const code = target.value;
     console.log(code);
