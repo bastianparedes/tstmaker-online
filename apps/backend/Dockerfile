@@ -2,7 +2,6 @@ FROM python:3.9
 
 WORKDIR /app
 COPY . .
-RUN pip install pipenv
-RUN pipenv install
+RUN pip install -r requirements.txt
 
-CMD [ "pipenv", "run", "dev" ]
+CMD [ "python", "api/dev.py", "dev" ]

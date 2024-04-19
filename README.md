@@ -1,5 +1,9 @@
 # Tst Maker created with Angular 17 and Flask (Python)
 
+## NODE
+use node 18.20.2
+install using yarn
+
 ## URL
 https://tst-maker.bastianparedes.com
 

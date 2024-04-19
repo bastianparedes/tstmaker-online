@@ -6,7 +6,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { EditorComponent } from '../common/editor/editor.component';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-exercise',
@@ -25,6 +30,21 @@ export class EditExerciseComponent implements OnInit {
   @Input() id!: string;
   exercise: Exercise | undefined = undefined;
   httpClient = inject(HttpClient);
+
+  form = new FormGroup({
+    name: new FormControl('Name', [
+      Validators.required,
+      Validators.minLength(0),
+    ]),
+    description: new FormControl('Name', [
+      Validators.required,
+      Validators.minLength(0),
+    ]),
+    code: new FormControl('Code', [
+      Validators.required,
+      Validators.minLength(0),
+    ]),
+  });
 
   ngOnInit() {
     this.httpClient

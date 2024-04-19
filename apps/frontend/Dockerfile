@@ -6,7 +6,7 @@ WORKDIR /app
 RUN npm install -g @angular/cli
 
 COPY . /app
-# RUN npm ci
+RUN npm i --legacy-peer-deps
 
 EXPOSE 4200
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--poll=1000", "--disable-host-check"]
+CMD ["npm", "run", "start", "--", "--proxy-config", "proxy.config.json", "--host", "0.0.0.0", "--poll=1000", "--disable-host-check"]

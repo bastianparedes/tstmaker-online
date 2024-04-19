@@ -6,6 +6,7 @@
         matInput
         placeholder="Exercise {{ exercise.id }}"
         name="name"
+        required
         [(ngModel)]="exercise.name"
         (ngModelChange)="updateName($event)" />
     </mat-form-field>
@@ -16,6 +17,7 @@
         matInput
         placeholder="Description exercise {{ exercise.id }}"
         name="description"
+        required
         [(ngModel)]="exercise.description"
         (ngModelChange)="updateDescription($event)"></textarea>
     </mat-form-field>
