@@ -28,6 +28,7 @@ class Numeric(ABC):
   def __mul__(self, other):
     pass
 
+  @abstractmethod
   def __rmul__(self, other):
     pass
 
@@ -88,4 +89,8 @@ class Literal(ABC):
 
   @abstractmethod
   def __init__(self):
+    pass
+
+  @abstractmethod
+  def __str__(self):
     pass
