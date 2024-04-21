@@ -2,8 +2,15 @@ import { Component } from '@angular/core';
 import { EditorComponent } from '../common/editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 const initialCode = `
 def fn():
@@ -17,7 +24,7 @@ def fn():
     'alternative_4': n1 * n2,
     'alternative_5': n1 * n2 ** (-1)
   }
-`;
+`.trim();
 
 @Component({
   selector: 'app-new-exercise',
@@ -28,33 +35,26 @@ def fn():
     EditorComponent,
     MatButtonModule,
     FormsModule,
+    ReactiveFormsModule,
+    MonacoEditorModule,
   ],
   templateUrl: './new-exercise.component.html',
 })
 export class NewExerciseComponent {
-  exercise = {
-    name: '',
-    description: '',
-    code: initialCode,
-  };
-
-  updateName(newName: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.name = newName;
-  }
-
-  updateDescription(newDescription: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.description = newDescription;
-  }
-
-  updateCode(newCode: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.code = newCode;
-  }
+  exercise = new FormGroup({
+    name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(1),
+    ]),
+    code: new FormControl(initialCode, [
+      Validators.required,
+      Validators.minLength(1),
+    ]),
+  });
 
   save(event: SubmitEvent) {
     event.preventDefault();
-    console.log('SUBMIT', this.exercise);
+    console.log('SUBMIT', this.exercise.value);
   }
 }

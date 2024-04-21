@@ -1,20 +1,12 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    FormsModule,
-    ReactiveFormsModule,
-    MonacoEditorModule,
-  ],
+  imports: [FormsModule, MonacoEditorModule],
   templateUrl: './editor.component.html',
 })
 export class EditorComponent {
