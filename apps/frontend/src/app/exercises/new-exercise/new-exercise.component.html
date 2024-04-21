@@ -1,1 +1,29 @@
-<p>new-exercise works!</p>
+<form class="w-full" (submit)="save($event)">
+  <mat-form-field class="w-full">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      placeholder="New Exercise"
+      name="name"
+      required
+      [(ngModel)]="exercise.name"
+      (ngModelChange)="updateName($event)" />
+  </mat-form-field>
+
+  <mat-form-field class="w-full">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      placeholder="Description new exercise"
+      name="description"
+      required
+      [(ngModel)]="exercise.description"
+      (ngModelChange)="updateDescription($event)"></textarea>
+  </mat-form-field>
+
+  <app-editor [code]="exercise.code" />
+  <div class="flex gap-5 mt-5">
+    <button mat-flat-button color="accent" class="mt-5">Save</button>
+    <a mat-flat-button color="warn" class="mt-5" href="/exercises">Cancel</a>
+  </div>
+</form>
