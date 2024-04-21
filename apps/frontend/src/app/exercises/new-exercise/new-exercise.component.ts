@@ -53,8 +53,18 @@ export class NewExerciseComponent {
     ]),
   });
 
-  save(event: SubmitEvent) {
+  async save(event: SubmitEvent) {
     event.preventDefault();
-    console.log('SUBMIT', this.exercise.value);
+    if (!this.exercise.valid) return;
+
+    const response = await fetch('/api/exercises', {
+      body: JSON.stringify(this.exercise.value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+
+    if (response.ok) location.href = '/exercises';
   }
 }

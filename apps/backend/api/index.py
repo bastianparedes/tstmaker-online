@@ -9,7 +9,6 @@ server = flask.Flask(__name__)
 @server.route('/api/exercises', methods=['GET', 'POST'])
 def getFullExercises():
   if (flask.request.method == 'GET'):
-    # print('AYUDA', flask.request.args)
     query = db.Exercise.select(
         db.Exercise.id,
         db.Exercise.name,
@@ -44,19 +43,6 @@ def getFullExercises():
         db.Exercise.code.column_name: new_user.code,
         db.Exercise.last_modified_date.column_name: new_user.last_modified_date
     }
-
-  elif (flask.request.method == 'PUT'):
-    request_data = flask.request.get_json()
-
-    query = (db.Exercise.update({
-        db.Exercise.name: request_data['name'],
-        db.Exercise.description: request_data['description'],
-        db.Exercise.code: request_data['code'],
-        db.Exercise.last_modified_date: datetime.datetime.now()
-    }).where(db.Exercise.id == request_data['id']))
-    query.execute()
-    return True
-
   return None
 
 
@@ -87,15 +73,25 @@ def getSpecificExercise(id: int):
   elif (flask.request.method == 'PUT'):
     request_data = flask.request.get_json()
 
-    query = (db.Exercise.update({
-        db.Exercise.name: request_data['name'],
-        db.Exercise.description: request_data['description'],
-        db.Exercise.code: request_data['code'],
-        db.Exercise.last_modified_date: datetime.datetime.now()
-    }).where(db.Exercise.id == request_data['id']))
-    query.execute()
-    return None
+    db.Exercise \
+      .update({
+          db.Exercise.name: request_data['name'],
+          db.Exercise.description: request_data['description'],
+          db.Exercise.code: request_data['code'],
+          db.Exercise.last_modified_date: datetime.datetime.now()
+      }) \
+      .where(db.Exercise.id == id) \
+      .returning(db.Exercise) \
+      .execute()
 
+    return flask.jsonify({
+      db.Exercise.id.name: int(id),
+      db.Exercise.name.name: request_data['name'],
+      db.Exercise.description.name: request_data['description'],
+      db.Exercise.code.name: request_data['code'],
+      db.Exercise.last_modified_date.name: datetime.datetime.now()
+    }
+)
   return None
 
 

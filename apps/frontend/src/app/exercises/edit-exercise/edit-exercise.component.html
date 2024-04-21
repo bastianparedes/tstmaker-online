@@ -1,31 +1,38 @@
 @if (exercise !== undefined) {
-  <form class="w-full" (submit)="save($event)">
-    <mat-form-field class="w-full">
-      <mat-label>Name</mat-label>
-      <input
-        matInput
-        placeholder="Exercise {{ exercise.id }}"
-        name="name"
-        required
-        [(ngModel)]="exercise.name"
-        (ngModelChange)="updateName($event)" />
-    </mat-form-field>
+  <form class="w-full p-5" (submit)="save($event)" [formGroup]="exercise">
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="New Exercise" formControlName="name" />
+      </mat-form-field>
 
-    <mat-form-field class="w-full">
-      <mat-label>Description</mat-label>
-      <textarea
-        matInput
-        placeholder="Description exercise {{ exercise.id }}"
-        name="description"
-        required
-        [(ngModel)]="exercise.description"
-        (ngModelChange)="updateDescription($event)"></textarea>
-    </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          placeholder="Description new exercise"
+          formControlName="description"></textarea>
+      </mat-form-field>
 
-    <app-editor [code]="exercise.code" />
-    <div class="flex gap-5 mt-5">
-      <button mat-flat-button color="accent" class="mt-5">Save</button>
-      <a mat-flat-button color="warn" class="mt-5" href="/exercises">Cancel</a>
+      <div class="h-96 border-2 border-solid">
+        <ngx-monaco-editor
+          style="width: 100%; height: 100%"
+          [options]="{
+            theme: 'vs-light',
+            language: 'python',
+            wordWrap: 'on',
+            tabSize: 2,
+            minimap: { enabled: false }
+          }"
+          formControlName="code" />
+      </div>
+
+      <div class="flex gap-5 mt-5">
+        <button mat-flat-button color="accent" class="mt-5">Save</button>
+        <a mat-flat-button color="warn" class="mt-5" href="/exercises"
+          >Cancel</a
+        >
+      </div>
     </div>
   </form>
 } @else {

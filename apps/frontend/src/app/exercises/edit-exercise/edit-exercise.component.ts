@@ -1,50 +1,45 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
 import { EditorComponent } from '../common/editor/editor.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import {
-  FormsModule,
   FormControl,
   FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
-  selector: 'app-edit-exercise',
+  selector: 'app-new-exercise',
   standalone: true,
   imports: [
     HttpClientModule,
     MatInputModule,
-    MatFormFieldModule,
+    MatFormFieldModule, // ¿no necesario?
     EditorComponent,
     MatButtonModule,
     FormsModule,
+    ReactiveFormsModule,
+    MonacoEditorModule,
   ],
   templateUrl: './edit-exercise.component.html',
 })
 export class EditExerciseComponent implements OnInit {
   @Input() id!: string;
-  exercise: Exercise | undefined = undefined;
+  exercise:
+    | undefined
+    | FormGroup<{
+        name: FormControl<string | null>;
+        description: FormControl<string | null>;
+        code: FormControl<string | null>;
+      }> = undefined;
   httpClient = inject(HttpClient);
-
-  form = new FormGroup({
-    name: new FormControl('Name', [
-      Validators.required,
-      Validators.minLength(0),
-    ]),
-    description: new FormControl('Name', [
-      Validators.required,
-      Validators.minLength(0),
-    ]),
-    code: new FormControl('Code', [
-      Validators.required,
-      Validators.minLength(0),
-    ]),
-  });
 
   ngOnInit() {
     this.httpClient
@@ -56,27 +51,37 @@ export class EditExerciseComponent implements OnInit {
         })
       )
       .subscribe((data) => {
-        this.exercise = data as Exercise;
+        const typedData = data as Exercise;
+        this.exercise = new FormGroup({
+          name: new FormControl(typedData.name, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          description: new FormControl(typedData.description, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          code: new FormControl(typedData.code, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+        });
       });
   }
 
-  updateName(newName: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.name = newName;
-  }
-
-  updateDescription(newDescription: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.description = newDescription;
-  }
-
-  updateCode(newCode: string) {
-    if (this.exercise === undefined) return;
-    this.exercise.code = newCode;
-  }
-
-  save(event: SubmitEvent) {
+  async save(event: SubmitEvent) {
     event.preventDefault();
-    console.log('SUBMIT', this.exercise);
+    if (this.exercise === undefined || !this.exercise.valid) return;
+    console.log(this.exercise.value);
+
+    const response = await fetch(`/api/exercises/${this.id}`, {
+      body: JSON.stringify(this.exercise.value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    });
+
+    if (response.ok) location.href = '/exercises';
   }
 }
