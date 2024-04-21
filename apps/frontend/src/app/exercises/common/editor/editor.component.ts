@@ -5,8 +5,6 @@ import { RouterOutlet } from '@angular/router';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
-import 'zone.js';
-
 @Component({
   selector: 'app-editor',
   standalone: true,
@@ -22,14 +20,7 @@ import 'zone.js';
 export class EditorComponent {
   @Input() code = '';
 
-  updateCode(newCode: string) {
-    console.log(newCode);
-  }
-
-  onChange(event: Event) {
-    const target = event.target as HTMLTextAreaElement;
-    const code = target.value;
-    console.log(code);
-    this.code = code;
+  onChange(newCode: string) {
+    this.code = newCode;
   }
 }

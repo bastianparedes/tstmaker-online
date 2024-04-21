@@ -9,6 +9,6 @@
       minimap: { enabled: false }
     }"
     required
-    (change)="onChange($event)"
-    [ngModel]="code" />
+    [ngModel]="code"
+    (ngModelChange)="onChange($event)" />
 </div>
