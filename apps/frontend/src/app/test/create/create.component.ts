@@ -1,25 +1,33 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem,
+  CdkDrag,
+  CdkDropList,
+} from '@angular/cdk/drag-drop';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import type { Exercise } from '../../../types/Exercise';
-import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
+type Exercise = {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  last_modified_date: string;
+};
 
 @Component({
   selector: 'app-test-create',
   templateUrl: './create.component.html',
+  styleUrl: './create.component.css',
   standalone: true,
-  imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule],
+  imports: [CdkDropList, CdkDrag, HttpClientModule, MatButtonModule],
 })
 export class TestCreateComponent implements OnInit {
-  displayedColumns = [
-    'id',
-    'name',
-    'description',
-    'last_modified_date',
-    'code',
-  ];
   exercises: Exercise[] | undefined = undefined;
+  exercisesSelected: Exercise[] = [];
+
   httpClient = inject(HttpClient);
 
   ngOnInit() {
@@ -33,5 +41,26 @@ export class TestCreateComponent implements OnInit {
         exercise.last_modified_date = `${day}/${month}/${year}`;
       });
     });
+  }
+
+  drop(event: CdkDragDrop<Exercise[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+  }
+
+  createTest() {
+    console.log(this.exercisesSelected);
   }
 }

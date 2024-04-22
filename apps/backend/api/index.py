@@ -9,24 +9,12 @@ server = flask.Flask(__name__)
 @server.route('/api/exercises', methods=['GET', 'POST'])
 def getFullExercises():
   if (flask.request.method == 'GET'):
-    query = db.Exercise.select(
-        db.Exercise.id,
-        db.Exercise.name,
-        db.Exercise.description,
-        db.Exercise.code,
-        db.Exercise.last_modified_date
-    ).order_by(
-        db.Exercise.id)
-    exercises = []
-    for exercise in query:
-      exercises.append({
-          "id": exercise.id,
-          "name": exercise.name,
-          "description": exercise.description,
-          "code": exercise.code,
-          "last_modified_date": exercise.last_modified_date
-      })
-    return exercises
+    columns = flask.request.args.getlist('columns')
+    if (len(columns) == 0): return flask.jsonify({}), 400
+
+    query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).order_by(db.Exercise.id)
+    results = list(query.dicts())
+    return flask.jsonify(results)
 
   elif (flask.request.method == 'POST'):
     request_data = flask.request.get_json()
@@ -49,26 +37,13 @@ def getFullExercises():
 @server.route('/api/exercises/<int:id>', methods=['GET', 'PUT'])
 def getSpecificExercise(id: int):
   if (flask.request.method == 'GET'):
-    query = db.Exercise.select(
-        db.Exercise.id,
-        db.Exercise.name,
-        db.Exercise.description,
-        db.Exercise.code
-    ).where(
-        db.Exercise.id == id
-    ).order_by(
-        db.Exercise.id).limit(1)
-    exercises = []
-    for exercise in query:
-      exercises.append({
-          "id": exercise.id,
-          "name": exercise.name,
-          "description": exercise.description,
-          "code": exercise.code
-      })
-    if len(exercises) != 1:
-      flask.abort(404, {})
-    return exercises[0]
+    columns = flask.request.args.getlist('columns')
+    if (len(columns) == 0): return flask.jsonify({}), 400
+
+    query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).where(db.Exercise.id == id).limit(1)
+    results = list(query.dicts())
+    if len(results) != 1: return flask.jsonify({}), 404
+    return results[0]
 
   elif (flask.request.method == 'PUT'):
     request_data = flask.request.get_json()

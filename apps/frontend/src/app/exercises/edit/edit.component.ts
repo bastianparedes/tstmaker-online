@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
-import type { Exercise } from '../../../types/Exercise';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EditorComponent } from '../common/editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +13,12 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { catchError, throwError } from 'rxjs';
+
+type Exercise = {
+  name: string;
+  description: string;
+  code: string;
+};
 
 @Component({
   selector: 'app-new-exercise',
@@ -43,7 +48,9 @@ export class ExerciseEditComponent implements OnInit {
 
   ngOnInit() {
     this.httpClient
-      .get(`/api/exercises/${this.id}`)
+      .get(
+        `/api/exercises/${this.id}?columns=name&columns=description&columns=code`
+      )
       .pipe(
         catchError(() => {
           location.href = '/exercises';
