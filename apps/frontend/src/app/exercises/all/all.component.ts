@@ -6,12 +6,12 @@ import type { Exercise } from '../../../types/Exercise';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-all-exercises',
-  templateUrl: './all-exercises.component.html',
+  selector: 'app-exercises-all',
+  templateUrl: './all.component.html',
   standalone: true,
   imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule],
 })
-export class AllExercisesComponent implements OnInit {
+export class ExercisesAllComponent implements OnInit {
   displayedColumns = [
     'id',
     'name',

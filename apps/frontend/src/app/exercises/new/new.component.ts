@@ -38,9 +38,9 @@ def fn():
     ReactiveFormsModule,
     MonacoEditorModule,
   ],
-  templateUrl: './new-exercise.component.html',
+  templateUrl: './new.component.html',
 })
-export class NewExerciseComponent {
+export class ExerciseNewComponent {
   exercise = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
     description: new FormControl('', [

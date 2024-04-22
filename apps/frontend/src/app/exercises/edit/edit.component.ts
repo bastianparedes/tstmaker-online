@@ -28,9 +28,9 @@ import { catchError, throwError } from 'rxjs';
     ReactiveFormsModule,
     MonacoEditorModule,
   ],
-  templateUrl: './edit-exercise.component.html',
+  templateUrl: './edit.component.html',
 })
-export class EditExerciseComponent implements OnInit {
+export class ExerciseEditComponent implements OnInit {
   @Input() id!: string;
   exercise:
     | undefined
