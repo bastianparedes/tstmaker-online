@@ -7,3 +7,9 @@ class Latex:
 
   def overline(element: Union[str, int, float]):
     return fr'\overline{{{element}}}'
+  
+  def decorator_mathrm(fn):
+    def newFn(*arg, **kwargs): 
+      return fr'\mathrm{{{fn(*arg, **kwargs)}}}'
+    return newFn
+    

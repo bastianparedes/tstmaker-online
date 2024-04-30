@@ -125,7 +125,7 @@ class Rational(Numeric):
       result = Rational(self_helper.__numerator * other_helper.__denominator + other_helper.__numerator * self_helper.__denominator, self_helper.__denominator * other_helper.__denominator).simplify()
       return result
 
-    raise Exception(f'Can not sum Rational and {type(other)}')
+    raise Exception(f'Can not sum {type(self)} and {type(other)}')
 
   def __radd__(self, other):
     return self + other
@@ -140,7 +140,7 @@ class Rational(Numeric):
       result = Rational(self_helper.__numerator * other_helper.__denominator - other_helper.__numerator * self_helper.__denominator, self_helper.__denominator * other_helper.__denominator).simplify()
       return result
 
-    raise Exception(f'Can not subtract Rational and {type(other)}')
+    raise Exception(f'Can not subtract {type(self)} and {type(other)}')
 
   def __rsub__(self, other):
     return -(self - other)
@@ -155,14 +155,14 @@ class Rational(Numeric):
       result = Rational(self_helper.__numerator * other_helper.__numerator, self_helper.__denominator * other_helper.__denominator).simplify()
       return result
 
-    raise Exception(f'Can not multiply Rational and {type(other)}')
+    raise Exception(f'Can not multiply {type(self)} and {type(other)}')
 
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
     if (other == 0):
-      raise Exception('Can not divide Rational by Zero')
+      raise Exception(f'Can not divide {type(self)} by Zero')
 
     if isinstance(other, (int, float)):
       other = Rational(other, 1)
@@ -173,7 +173,7 @@ class Rational(Numeric):
       result = Rational(self_helper.__numerator * other_helper.__denominator, self_helper.__denominator * other_helper.__numerator).simplify()
       return result
 
-    raise Exception(f'Can not divide Rational and {type(other)}')
+    raise Exception(f'Can not divide {type(self)} and {type(other)}')
 
   def __rtruediv__(self, other):
     if (self == 0):
@@ -213,14 +213,15 @@ class Rational(Numeric):
   def __abs__(self):
     return Rational(abs(self.__numerator), abs(self.__denominator))
 
+  @Latex.decorator_mathrm
   def __str__(self):
     if self.__is_decimal_loaded:
       if not isinstance(self.__integer_part, int):
-        raise Exception('integer_part in Rational is None when triyng to get string')
+        raise Exception(f'integer_part in {type(self)} is None when triyng to get string')
       if not isinstance(self.__non_periodic_decimal_part, str):
-        raise Exception('non_periodic_decimal_part in Rational is not str when triyng to get string')
+        raise Exception(f'non_periodic_decimal_part in {type(self)} is not str when triyng to get string')
       if not isinstance(self.__periodic_decimal_part, str):
-        raise Exception('periodic_decimal_part in Rational is not str when triyng to get string')
+        raise Exception(f'periodic_decimal_part in {type(self)} is not str when triyng to get string')
 
       if self.__non_periodic_decimal_part == self.__periodic_decimal_part == '':
         return str(self.__integer_part)

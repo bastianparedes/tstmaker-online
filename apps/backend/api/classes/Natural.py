@@ -13,9 +13,9 @@ class Natural(Numeric):
 
   def __init__(self, number: int):
     if not isinstance(number, int):
-      raise Exception('number in Natural must be intenger')
+      raise Exception(f'number in {type(self)} must be intenger')
     if not number > 0:
-      raise Exception('number in Natural must be greater than zero')
+      raise Exception(f'number in {type(self)} must be greater than zero')
 
     self.__number = number
     self.__dividers: Union[None, List[int]] = None
@@ -48,58 +48,58 @@ class Natural(Numeric):
 
   def __add__(self, other):
     if isinstance(other, int):
-      return Natural(self.value + other)
+      return Natural(int(self) + other)
     if isinstance(other, float):
-      return Rational(self.value + other, 1).simplify()
+      return Rational(int(self) + other, 1).simplify()
     if isinstance(other, (Rational)):
-      return Rational(self.value + 1) + other
+      return Rational(int(self) + 1) + other
     if isinstance(other, (Natural)):
-      return Natural(self.value, other.value)
-    raise Exception(f'Can not sum Natural and {type(other)}')
+      return Natural(int(self), int(other))
+    raise Exception(f'Can not sum {type(self)} and {type(other)}')
 
   def __radd__(self, other):
     return self + other
 
   def __sub__(self, other):
     if isinstance(other, int):
-      return Rational(self.value - other)
+      return Rational(int(self) - other)
     if isinstance(other, float):
-      return Rational(self.value, 1) - other
+      return Rational(int(self), 1) - other
     if isinstance(other, Rational):
-      return Rational(self.value, 1) - other
+      return Rational(int(self), 1) - other
     if isinstance(other, Natural):
-      return Natural(self.value - other.value)
-    raise Exception(f'Can not subtract Natural and {type(other)}')
+      return Natural(int(self) - int(other))
+    raise Exception(f'Can not subtract {type(self)} and {type(other)}')
 
   def __rsub__(self, other):
     return -(self - other)
 
   def __mul__(self, other):
     if isinstance(other, int):
-      return Natural(self.value * other)
+      return Natural(int(self) * other)
     if isinstance(other, float):
-      return Rational(self.value, 1) * other
+      return Rational(int(self), 1) * other
     if isinstance(other, Rational):
-      return Rational(self.value, 1) * other
+      return Rational(int(self), 1) * other
     if isinstance(other, Natural):
-      return Natural(self.value * other.value)
-    raise Exception(f'Can not multiply Natural and {type(other)}')
+      return Natural(int(self) * int(other))
+    raise Exception(f'Can not multiply {type(self)} and {type(other)}')
 
   def __rmul__(self, other):
     return self * other
 
   def __truediv__(self, other):
     if (other == 0):
-      raise Exception('Can not divide Natural by Zero')
+      raise Exception('Can not divide {type(self)} by Zero')
     if isinstance(other, int):
-      return Rational(self.value, other).simplify()
+      return Rational(int(self), other).simplify()
     if isinstance(other, float):
-      return Rational(self.value, other).simplify()
+      return Rational(int(self), other).simplify()
     if isinstance(other, Rational):
-      return Rational(self.value * other.__denominator, other.__numerator).simplify()
+      return Rational(int(self) * other.__denominator, other.__numerator).simplify()
     if isinstance(other, Natural):
-      return Rational(self.value, other.value).simplify()
-    raise Exception(f'Can not divide Natural and {type(other)}')
+      return Rational(int(self), int(other)).simplify()
+    raise Exception(f'Can not divide {type(self)} and {type(other)}')
 
   def __rtruediv__(self, other):
     if (self == 0):
@@ -110,7 +110,7 @@ class Natural(Numeric):
   def __pow__(self, other):
     if isinstance(other, (int)):
       if other > 0:
-        return Natural(self.value ** other)
+        return Natural(int(self) ** other)
 
       if other == 0:
         if self == 0:
@@ -119,11 +119,11 @@ class Natural(Numeric):
 
       if self == 0:  # 0 ^ (-*)
         raise Exception(f'Can not raise {type(self)} equals Zero to negative number')
-      return Rational(1, self.value * abs(other))
+      return Rational(1, int(self) * abs(other))
 
     if isinstance(other, (Natural)):
       if other > 0:
-        return Natural(self.value ** other.value)
+        return Natural(int(self) ** int(other))
 
       if other == 0:
         if self == 0:
@@ -132,15 +132,15 @@ class Natural(Numeric):
 
       if self == 0:  # 0 ^ (-*)
         raise Exception(f'Can not raise {type(self)} equals Zero to negative number')
-      return Rational(1, self.value * abs(other.value))
+      return Rational(1, int(self) * abs(int(other)))
 
     raise Exception(f'Can not raise {type(self)} to {type(other)}')
 
   def __rpow__(self, other):
-    return other ** self.value
+    return other ** int(self)
 
   def __neg__(self):
-    rational = -Rational(self.value, 1)
+    rational = -Rational(int(self), 1)
     rational.simplify()
     return rational
 
@@ -150,41 +150,41 @@ class Natural(Numeric):
   def __str__(self) -> str:
     return str(int(self.__number))
 
-  def __round__(self):
-    return self
+  def __round__(self, n=0):
+    return round(self.__number, n)
 
   def __lt__(self, other) -> bool:
     if isinstance(other, (int, float)):
-      return self.value < other
+      return int(self) < other
     if isinstance(other, Rational):
-      return self.value < float(other)
+      return int(self) < float(other)
     if isinstance(other, Natural):
-      return self.value < other.value
+      return int(self) < int(other)
 
     raise Exception(f'Can not use "<" operator with {type(self)} and {type(other)}')
 
   def __eq__(self, other) -> bool:
     if isinstance(other, (int, float)):
-      return self.value == other
+      return int(self) == other
     if isinstance(other, Rational):
-      return self.value == float(other)
+      return int(self) == float(other)
     if isinstance(other, Natural):
-      return self.value == other.value
+      return int(self) == int(other)
 
     raise Exception(f'Can not use "==" operator with {type(self)} and {type(other)}')
 
   def __gt__(self, other) -> bool:
     if isinstance(other, (int, float)):
-      return self.value > other
+      return int(self) > other
     if isinstance(other, Rational):
-      return self.value > float(other)
+      return int(self) > float(other)
     if isinstance(other, Natural):
-      return self.value > other.value
+      return int(self) > int(other)
 
     raise Exception(f'Can not use ">" operator with {type(self)} and {type(other)}')
 
   def __int__(self):
-    return int(self.value)
+    return self.__number
 
   def __float__(self):
-    return float(self.value)
+    return float(int(self))

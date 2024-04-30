@@ -9,7 +9,7 @@ server = flask.Flask(__name__)
 api = flask_restful.Api(server)
 
 
-class Full_Exercise(flask_restful.Resource):
+class Full_exercise(flask_restful.Resource):
   def __init__(self):
     self.parser_get = flask_restful.reqparse.RequestParser()
     self.parser_post = flask_restful.reqparse.RequestParser()
@@ -48,10 +48,10 @@ class Full_Exercise(flask_restful.Resource):
     }
 
 
-api.add_resource(Full_Exercise, '/api/exercises')
+api.add_resource(Full_exercise, '/api/exercises')
 
 
-class Specific_Exercise(flask_restful.Resource):
+class Specific_exercise(flask_restful.Resource):
   def __init__(self):
     self.parser_get = flask_restful.reqparse.RequestParser()
     self.parser_put = flask_restful.reqparse.RequestParser()
@@ -98,7 +98,7 @@ class Specific_Exercise(flask_restful.Resource):
     })
 
 
-api.add_resource(Specific_Exercise, '/api/exercises/<int:id>')
+api.add_resource(Specific_exercise, '/api/exercises/<int:id>')
 
 
 @server.route('/api/pdf_url', methods=['POST'])
