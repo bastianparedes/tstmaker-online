@@ -103,7 +103,7 @@ class Rational(Numeric):
         for _ in range(0, str(multiple).count('9') - len(periodic_decimal_part)):
           periodic_decimal_part = '0' + periodic_decimal_part
       self.__periodic_decimal_part = periodic_decimal_part
-    
+
     return self
 
   def get_numerator(self):
@@ -128,7 +128,7 @@ class Rational(Numeric):
     raise Exception(f'Can not sum Rational and {type(other)}')
 
   def __radd__(self, other):
-      return self + other
+    return self + other
 
   def __sub__(self, other):
     if isinstance(other, (int, float)):
@@ -143,7 +143,7 @@ class Rational(Numeric):
     raise Exception(f'Can not subtract Rational and {type(other)}')
 
   def __rsub__(self, other):
-      return -(self - other)
+    return -(self - other)
 
   def __mul__(self, other):
     if isinstance(other, (int, float)):
@@ -192,7 +192,7 @@ class Rational(Numeric):
           raise Exception(f'Can not raise {type(self)} equals Zero to Zero')
         return Rational(1, 1).simplify()
 
-      if self == 0: # 0 ^ (-*)
+      if self == 0:  # 0 ^ (-*)
         raise Exception(f'Can not raise {type(self)} equals Zero to negative number')
 
       self_helper = Rational(self.__numerator, self.__denominator).simplify()

@@ -10,7 +10,8 @@ server = flask.Flask(__name__)
 def getFullExercises():
   if (flask.request.method == 'GET'):
     columns = flask.request.args.getlist('columns')
-    if (len(columns) == 0): return flask.jsonify({}), 400
+    if (len(columns) == 0):
+      return flask.jsonify({}), 400
 
     query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).order_by(db.Exercise.id)
     results = list(query.dicts())
@@ -38,11 +39,13 @@ def getFullExercises():
 def getSpecificExercise(id: int):
   if (flask.request.method == 'GET'):
     columns = flask.request.args.getlist('columns')
-    if (len(columns) == 0): return flask.jsonify({}), 400
+    if (len(columns) == 0):
+      return flask.jsonify({}), 400
 
     query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).where(db.Exercise.id == id).limit(1)
     results = list(query.dicts())
-    if len(results) != 1: return flask.jsonify({}), 404
+    if len(results) != 1:
+      return flask.jsonify({}), 404
     return results[0]
 
   elif (flask.request.method == 'PUT'):
@@ -55,18 +58,18 @@ def getSpecificExercise(id: int):
           db.Exercise.code: request_data['code'],
           db.Exercise.last_modified_date: datetime.datetime.now()
       }) \
-      .where(db.Exercise.id == id) \
-      .returning(db.Exercise) \
-      .execute()
+        .where(db.Exercise.id == id) \
+        .returning(db.Exercise) \
+        .execute()
 
     return flask.jsonify({
-      db.Exercise.id.name: int(id),
-      db.Exercise.name.name: request_data['name'],
-      db.Exercise.description.name: request_data['description'],
-      db.Exercise.code.name: request_data['code'],
-      db.Exercise.last_modified_date.name: datetime.datetime.now()
+        db.Exercise.id.name: int(id),
+        db.Exercise.name.name: request_data['name'],
+        db.Exercise.description.name: request_data['description'],
+        db.Exercise.code.name: request_data['code'],
+        db.Exercise.last_modified_date.name: datetime.datetime.now()
     }
-)
+    )
   return None
 
 
