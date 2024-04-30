@@ -21,9 +21,9 @@ class Full_Exercise(flask_restful.Resource):
       return value
     self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
 
-    self.parser_post.add_argument(db.Exercise.name.column_name, type=str, location='form', required=True)
-    self.parser_post.add_argument(db.Exercise.description.column_name, type=str, location='form', required=True)
-    self.parser_post.add_argument(db.Exercise.code.column_name, type=str, location='form', required=True)
+    self.parser_post.add_argument(db.Exercise.name.column_name, type=str, location='json', required=True)
+    self.parser_post.add_argument(db.Exercise.description.column_name, type=str, location='json', required=True)
+    self.parser_post.add_argument(db.Exercise.code.column_name, type=str, location='json', required=True)
 
   def get(self):
     args = self.parser_get.parse_args()
@@ -44,8 +44,7 @@ class Full_Exercise(flask_restful.Resource):
         db.Exercise.id.column_name: new_user.id,
         db.Exercise.name.column_name: new_user.name,
         db.Exercise.description.column_name: new_user.description,
-        db.Exercise.code.column_name: new_user.code,
-        db.Exercise.last_modified_date.column_name: new_user.last_modified_date
+        db.Exercise.code.column_name: new_user.code
     }
 
 
@@ -64,9 +63,9 @@ class Specific_Exercise(flask_restful.Resource):
       return value
     self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
 
-    self.parser_put.add_argument(db.Exercise.name.column_name, type=str, location='form', required=True)
-    self.parser_put.add_argument(db.Exercise.description.column_name, type=str, location='form', required=True)
-    self.parser_put.add_argument(db.Exercise.code.column_name, type=str, location='form', required=True)
+    self.parser_put.add_argument(db.Exercise.name.column_name, type=str, location='json', required=True)
+    self.parser_put.add_argument(db.Exercise.description.column_name, type=str, location='json', required=True)
+    self.parser_put.add_argument(db.Exercise.code.column_name, type=str, location='json', required=True)
 
   def get(self, id: int):
     args = self.parser_get.parse_args()
@@ -92,11 +91,10 @@ class Specific_Exercise(flask_restful.Resource):
         .execute()
 
     return flask.jsonify({
-        db.Exercise.id.name: int(id),
+        db.Exercise.id.name: id,
         db.Exercise.name.name: args[db.Exercise.name.column_name],
         db.Exercise.description.name: args[db.Exercise.description.column_name],
-        db.Exercise.code.name: args[db.Exercise.code.column_name],
-        db.Exercise.last_modified_date.name: datetime.datetime.now()
+        db.Exercise.code.name: args[db.Exercise.code.column_name]
     })
 
 
