@@ -13,4 +13,4 @@ exclude = "Definiciones.py"
 
 [tool.pytest.ini_options]
 addopts = "-ra -q"
-testpaths = ["api/**/tests/*.py"]
+testpaths = ["api/**/__tests__/*.py"]
