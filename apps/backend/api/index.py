@@ -1,28 +1,43 @@
 import flask
+import flask_restful
+import flask_restful.reqparse
 import requests
 import datetime
 import db
 
 server = flask.Flask(__name__)
+api = flask_restful.Api(server)
 
 
-@server.route('/api/exercises', methods=['GET', 'POST'])
-def getFullExercises():
-  if (flask.request.method == 'GET'):
-    columns = flask.request.args.getlist('columns')
-    if (len(columns) == 0):
-      return flask.jsonify({}), 400
+class Full_Exercise(flask_restful.Resource):
+  def __init__(self):
+    self.parser_get = flask_restful.reqparse.RequestParser()
+    self.parser_post = flask_restful.reqparse.RequestParser()
 
+    def validate_columns(value, field):
+      valid_columns = [db.Exercise.id.column_name, db.Exercise.name.column_name, db.Exercise.description.column_name, db.Exercise.code.column_name, db.Exercise.last_modified_date.column_name]
+      if value not in valid_columns:
+        raise ValueError(f"Value '{value}' in '{field}' is not one of valid values: {', '.join(valid_columns)}")
+      return value
+    self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
+
+    self.parser_post.add_argument(db.Exercise.name.column_name, type=str, location='form', required=True)
+    self.parser_post.add_argument(db.Exercise.description.column_name, type=str, location='form', required=True)
+    self.parser_post.add_argument(db.Exercise.code.column_name, type=str, location='form', required=True)
+
+  def get(self):
+    args = self.parser_get.parse_args()
+    columns = list(set(args['columns']))
     query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).order_by(db.Exercise.id)
     results = list(query.dicts())
     return flask.jsonify(results)
 
-  elif (flask.request.method == 'POST'):
-    request_data = flask.request.get_json()
+  def post(self):
+    args = self.parser_post.parse_args()
     new_user = db.Exercise.create(
-        name=request_data['name'],
-        description=request_data['description'],
-        code=request_data['code']
+        name=args[db.Exercise.name.column_name],
+        description=args[db.Exercise.description.column_name],
+        code=args[db.Exercise.code.column_name]
     )
 
     return {
@@ -32,15 +47,30 @@ def getFullExercises():
         db.Exercise.code.column_name: new_user.code,
         db.Exercise.last_modified_date.column_name: new_user.last_modified_date
     }
-  return None
 
 
-@server.route('/api/exercises/<int:id>', methods=['GET', 'PUT'])
-def getSpecificExercise(id: int):
-  if (flask.request.method == 'GET'):
-    columns = flask.request.args.getlist('columns')
-    if (len(columns) == 0):
-      return flask.jsonify({}), 400
+api.add_resource(Full_Exercise, '/api/exercises')
+
+
+class Specific_Exercise(flask_restful.Resource):
+  def __init__(self):
+    self.parser_get = flask_restful.reqparse.RequestParser()
+    self.parser_put = flask_restful.reqparse.RequestParser()
+
+    def validate_columns(value, field):
+      valid_columns = [db.Exercise.id.column_name, db.Exercise.name.column_name, db.Exercise.description.column_name, db.Exercise.code.column_name, db.Exercise.last_modified_date.column_name]
+      if value not in valid_columns:
+        raise ValueError(f"Value '{value}' in '{field}' is not one of valid values: {', '.join(valid_columns)}")
+      return value
+    self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
+
+    self.parser_put.add_argument(db.Exercise.name.column_name, type=str, location='form', required=True)
+    self.parser_put.add_argument(db.Exercise.description.column_name, type=str, location='form', required=True)
+    self.parser_put.add_argument(db.Exercise.code.column_name, type=str, location='form', required=True)
+
+  def get(self, id: int):
+    args = self.parser_get.parse_args()
+    columns = list(set(args['columns']))
 
     query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).where(db.Exercise.id == id).limit(1)
     results = list(query.dicts())
@@ -48,14 +78,13 @@ def getSpecificExercise(id: int):
       return flask.jsonify({}), 404
     return results[0]
 
-  elif (flask.request.method == 'PUT'):
-    request_data = flask.request.get_json()
-
+  def put(self, id: int):
+    args = self.parser_put.parse_args()
     db.Exercise \
       .update({
-          db.Exercise.name: request_data['name'],
-          db.Exercise.description: request_data['description'],
-          db.Exercise.code: request_data['code'],
+          db.Exercise.name: args[db.Exercise.name.column_name],
+          db.Exercise.description: args[db.Exercise.description.column_name],
+          db.Exercise.code: args[db.Exercise.code.column_name],
           db.Exercise.last_modified_date: datetime.datetime.now()
       }) \
         .where(db.Exercise.id == id) \
@@ -64,13 +93,14 @@ def getSpecificExercise(id: int):
 
     return flask.jsonify({
         db.Exercise.id.name: int(id),
-        db.Exercise.name.name: request_data['name'],
-        db.Exercise.description.name: request_data['description'],
-        db.Exercise.code.name: request_data['code'],
+        db.Exercise.name.name: args[db.Exercise.name.column_name],
+        db.Exercise.description.name: args[db.Exercise.description.column_name],
+        db.Exercise.code.name: args[db.Exercise.code.column_name],
         db.Exercise.last_modified_date.name: datetime.datetime.now()
-    }
-    )
-  return None
+    })
+
+
+api.add_resource(Specific_Exercise, '/api/exercises/<int:id>')
 
 
 @server.route('/api/pdf_url', methods=['POST'])
