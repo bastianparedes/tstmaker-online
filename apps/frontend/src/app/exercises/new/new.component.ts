@@ -18,11 +18,16 @@ def fn():
   n2 = Rational(7, 5)
 
   return {
-    'alternative_1': Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator),
-    'alternative_2': Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator),
-    'alternative_3': Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator),
-    'alternative_4': n1 * n2,
-    'alternative_5': n1 * n2 ** (-1)
+    comparator: {
+
+    },
+    alterantives: {
+      'alternative_1': Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator()),
+      'alternative_2': Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
+      'alternative_3': Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator()),
+      'alternative_4': n1 * n2,
+      'alternative_5': n1 * n2 ** (-1)
+    }
   }
 `.trim();
 
