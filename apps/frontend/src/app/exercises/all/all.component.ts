@@ -3,6 +3,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
+import { loadPyScript, runPythonCode } from '../../utils/pyscript';
 
 type Exercise = {
   id: number;
@@ -29,6 +30,8 @@ export class ExercisesAllComponent implements OnInit {
   httpClient = inject(HttpClient);
 
   ngOnInit() {
+    loadPyScript();
+    runPythonCode('print("hola mundo")');
     this.httpClient
       .get(
         '/api/exercises?columns=id&columns=name&columns=description&columns=last_modified_date'
