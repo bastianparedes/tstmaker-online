@@ -10,7 +10,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import { loadPyScript, runPythonCode } from '../../utils/pyscript';
 
 type Exercise = {
   id: number;
@@ -48,6 +48,11 @@ export class TestCreateComponent implements OnInit {
   httpClient = inject(HttpClient);
 
   ngOnInit() {
+    loadPyScript();
+    runPythonCode(`
+from pyscript import ffi, window
+window.a = ffi.to_js({"hola": [1, 2, 3]})
+    `);
     this.httpClient
       .get('/api/exercises?columns=id&columns=name')
       .subscribe((data) => {

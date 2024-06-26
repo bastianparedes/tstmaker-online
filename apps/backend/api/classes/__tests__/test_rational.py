@@ -1,4 +1,4 @@
-from api.classes.Rational import Rational
+from api.classes.index import Rational
 
 
 def test_eq():

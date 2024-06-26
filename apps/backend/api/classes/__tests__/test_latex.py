@@ -1,4 +1,4 @@
-from api.classes.Latex import Latex
+from api.classes.index import Latex
 
 
 def test_fraction():
