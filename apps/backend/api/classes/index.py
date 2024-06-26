@@ -732,3 +732,4 @@ class Trigonometric_function(Numeric):
       return 1 / math.tan(self.__radians)
 
     raise Exception(f'fn_name in {type(self)} must be one of {self.__valid_fn_names}')
+

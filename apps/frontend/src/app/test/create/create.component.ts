@@ -8,9 +8,9 @@ import {
 } from '@angular/cdk/drag-drop';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { loadPyScript, runPythonCode } from '../../utils/pyscript';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { runPythonCode } from '../../utils/pyscript';
 
 type Exercise = {
   id: number;
@@ -36,23 +36,13 @@ type ExerciseWithQuantity = Exercise & {
   ],
 })
 export class TestCreateComponent implements OnInit {
-  exercises: ExerciseWithQuantity[] | undefined = undefined;
-  exercisesSelected: ExerciseWithQuantity[] = [
-    {
-      id: 0,
-      name: 'Primero ejercicio',
-      quantity: 5,
-    },
-  ];
-
+  exercises: ExerciseWithQuantity[] = [];
+  exercisesSelected: ExerciseWithQuantity[] = [];
+  isLoading = true;
   httpClient = inject(HttpClient);
+  classesPythonCode: string | undefined = undefined;
 
-  ngOnInit() {
-    loadPyScript();
-    runPythonCode(`
-from pyscript import ffi, window
-window.a = ffi.to_js({"hola": [1, 2, 3]})
-    `);
+  async ngOnInit() {
     this.httpClient
       .get('/api/exercises?columns=id&columns=name')
       .subscribe((data) => {
@@ -82,7 +72,59 @@ window.a = ffi.to_js({"hola": [1, 2, 3]})
     }
   }
 
-  createTest() {
-    console.log(this.exercisesSelected);
+  async createTest() {
+    const idsSelected = this.exercisesSelected.map(
+      (exerciseSelected) => exerciseSelected.id
+    );
+
+    const classesPythonCodePromise = new Promise<string>((resolve) => {
+      if (this.classesPythonCode !== undefined)
+        return resolve(this.classesPythonCode);
+      this.httpClient
+        .get('/api/classes', { responseType: 'text' })
+        .subscribe((data) => {
+          this.classesPythonCode = data;
+          resolve(data);
+        });
+    });
+
+    const exercisesPythonCodeDataPromise = new Promise<
+      {
+        id: number;
+        code: string;
+      }[]
+    >((resolve) => {
+      const queryParams = new URLSearchParams();
+      queryParams.append('columns', 'id');
+      queryParams.append('columns', 'code');
+      idsSelected.forEach((idSelected) =>
+        queryParams.append('ids', String(idSelected))
+      );
+      this.httpClient
+        .get<
+          {
+            id: number;
+            code: string;
+          }[]
+        >(`/api/exercises?${queryParams.toString()}`)
+        .subscribe((data) => {
+          resolve(data);
+        });
+    });
+
+    const [classesPythonCode, exercisesPythonCodeData] = await Promise.all([
+      classesPythonCodePromise,
+      exercisesPythonCodeDataPromise,
+    ]);
+
+    const result = await Promise.all(
+      exercisesPythonCodeData.map((exercisePythonCodeData) => {
+        return runPythonCode(
+          [classesPythonCode, exercisePythonCodeData.code].join('\n')
+        );
+      })
+    );
+
+    (window as any).a = result[0];
   }
 }

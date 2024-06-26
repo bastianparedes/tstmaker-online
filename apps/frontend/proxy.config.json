@@ -8,5 +8,15 @@
     "target": "http://backend:5000",
     "secure": false,
     "logLevel": "debug"
+  },
+  "/api/classes": {
+    "target": "http://backend:5000",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/api/classes/*": {
+    "target": "http://backend:5000",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

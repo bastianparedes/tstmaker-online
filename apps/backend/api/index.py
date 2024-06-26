@@ -4,6 +4,7 @@ import flask_restful.reqparse
 import requests
 import datetime
 import db
+import random
 
 server = flask.Flask(__name__)
 api = flask_restful.Api(server)
@@ -19,7 +20,12 @@ class Full_exercise(flask_restful.Resource):
       if value not in valid_columns:
         raise ValueError(f"Value '{value}' in '{field}' is not one of valid values: {', '.join(valid_columns)}")
       return value
+    
+    def validate_ids(value):
+      return int(value)
+
     self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
+    self.parser_get.add_argument('ids', type=validate_ids, action='append', location='args', required=False, default=[])
 
     self.parser_post.add_argument(db.Exercise.name.column_name, type=str, location='json', required=True)
     self.parser_post.add_argument(db.Exercise.description.column_name, type=str, location='json', required=True)
@@ -28,7 +34,10 @@ class Full_exercise(flask_restful.Resource):
   def get(self):
     args = self.parser_get.parse_args()
     columns = list(set(args['columns']))
+    ids = list(set(args['ids']))
     query = db.Exercise.select(*[getattr(db.Exercise, column) for column in columns]).order_by(db.Exercise.id)
+    if len(ids) != 0:
+      query = query.where(db.Exercise.id.in_(ids))
     results = list(query.dicts())
     return flask.jsonify(results)
 
@@ -46,7 +55,6 @@ class Full_exercise(flask_restful.Resource):
         db.Exercise.description.column_name: new_user.description,
         db.Exercise.code.column_name: new_user.code
     }
-
 
 api.add_resource(Full_exercise, '/api/exercises')
 
@@ -96,7 +104,6 @@ class Specific_exercise(flask_restful.Resource):
         db.Exercise.description.name: args[db.Exercise.description.column_name],
         db.Exercise.code.name: args[db.Exercise.code.column_name]
     })
-
 
 api.add_resource(Specific_exercise, '/api/exercises/<int:id>')
 

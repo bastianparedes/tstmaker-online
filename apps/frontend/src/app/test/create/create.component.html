@@ -1,67 +1,65 @@
-@if (this.exercises !== undefined) {
-  <div>
-    <button
-      mat-flat-button
-      color="accent"
-      class="mt-5"
-      (click)="createTest()"
-      [disabled]="this.exercisesSelected.length === 0">
-      Save
-    </button>
-    <div class="flex">
-      <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
-        <h2>Available</h2>
-        <div
-          id="exercises"
-          cdkDropList
-          [cdkDropListData]="exercises"
-          cdkDropListConnectedTo="exercisesSelected"
-          class="border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden block"
-          (cdkDropListDropped)="drop($event)">
-          @for (exercise of exercises; track exercise.id) {
-            <div
-              class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
-              [cdkDragData]="exercise.id"
-              cdkDrag>
-              {{ exercise.id }}: {{ exercise.name }}
-            </div>
-          }
-        </div>
+<div>
+  <button
+    mat-flat-button
+    color="accent"
+    class="mt-5"
+    (click)="createTest()"
+    [disabled]="this.exercisesSelected.length === 0">
+    Save
+  </button>
+  <div class="flex">
+    <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
+      <h2>Available</h2>
+      <div
+        id="exercises"
+        cdkDropList
+        [cdkDropListData]="exercises"
+        cdkDropListConnectedTo="exercisesSelected"
+        class="border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden block"
+        (cdkDropListDropped)="drop($event)">
+        @for (exercise of exercises; track exercise.id) {
+          <div
+            class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
+            [cdkDragData]="exercise.id"
+            cdkDrag>
+            {{ exercise.id }}: {{ exercise.name }}
+          </div>
+        }
       </div>
-      <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
-        <h2>Selected</h2>
-        <div
-          id="exercisesSelected"
-          cdkDropList
-          [cdkDropListData]="exercisesSelected"
-          cdkDropListConnectedTo="exercises"
-          class="border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden block"
-          (cdkDropListDropped)="drop($event)">
-          @for (exercise of exercisesSelected; track exercise.id) {
-            <div
-              class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
-              cdkDrag
-              [cdkDragData]="exercise.id">
-              <div>
-                <span>ID: {{ exercise.id }}</span>
-              </div>
-              <div>
-                <span>Name: {{ exercise.name }}</span>
-              </div>
-              <mat-form-field>
-                <mat-label>Quantity</mat-label>
-                <input
-                  matInput
-                  type="number"
-                  class="example-right-align"
-                  placeholder="0"
-                  min="0"
-                  [value]="exercise.quantity" />
-              </mat-form-field>
+    </div>
+    <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
+      <h2>Selected</h2>
+      <div
+        id="exercisesSelected"
+        cdkDropList
+        [cdkDropListData]="exercisesSelected"
+        cdkDropListConnectedTo="exercises"
+        class="border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden block"
+        (cdkDropListDropped)="drop($event)">
+        @for (exercise of exercisesSelected; track exercise.id) {
+          <div
+            class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
+            cdkDrag
+            [cdkDragData]="exercise.id">
+            <div>
+              <span>ID: {{ exercise.id }}</span>
             </div>
-          }
-        </div>
+            <div>
+              <span>Name: {{ exercise.name }}</span>
+            </div>
+            <mat-form-field>
+              <mat-label>Quantity</mat-label>
+              <input
+                matInput
+                type="number"
+                class="example-right-align"
+                placeholder="0"
+                min="0"
+                [value]="exercise.quantity" />
+            </mat-form-field>
+          </div>
+        }
       </div>
     </div>
   </div>
-}
+</div>
