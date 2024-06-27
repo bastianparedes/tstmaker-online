@@ -22,24 +22,24 @@ def fn():
   n1 = Rational(n1_numerator, n1_denominator)
   n2 = Rational(n2_numerator, n2_denominator)
 
-  math_expression = Latex.math_mode(f'{n1} + {n2} =')
+  math_expression = Latex.math_mode(f'{n1} + {n2}')
 
   return {
     'statement': f'¿Cuál es el resultado de {math_expression}?',
-    'alterantives': {
-      'alternative_1': str(Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator())), # this is must be the correct one
-      'alternative_2': str(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
-      'alternative_3': str(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
-      'alternative_4': str(n1 * n2),
-      'alternative_5': str(n1 * n2 ** (-1))
-    },
-    'comparator': {
-      'alternative_1': Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator()),
-      'alternative_2': Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
-      'alternative_3': Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator()),
-      'alternative_4': n1 * n2,
-      'alternative_5': n1 * n2 ** (-1)
-    },
+    'alternatives': [
+      Latex.math_mode(Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator())), # this is must be the correct one
+      Latex.math_mode(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
+      Latex.math_mode(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
+      Latex.math_mode(n1 * n2),
+      Latex.math_mode(n1 * n2 ** (-1))
+    ],
+    'comparators': [
+      Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator()),
+      Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
+      Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator()),
+      n1 * n2,
+      n1 * n2 ** (-1)
+    ],
     'identifiers': [n1, n2]
   }
 `.trim();

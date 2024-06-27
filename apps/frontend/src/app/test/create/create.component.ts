@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { runPythonCode } from '../../utils/pyscript';
+import { completeLatexCode, exerciseStatements, tableUniqueSelection } from '../../utils/latex';
 
 type Exercise = {
   id: number;
@@ -124,24 +125,26 @@ export class TestCreateComponent implements OnInit {
         });
     });
 
-    console.log('AYUDA');
-
     const [classesPythonCode, exercisesPythonCodeData] = await Promise.all([
       classesPythonCodePromise,
       exercisesPythonCodeDataPromise,
     ]);
-    console.log('AYUDA');
 
-    const result = await Promise.all(
+    const result = (await Promise.all(
       exercisesPythonCodeData.map((exercisePythonCodeData) => {
         return runPythonCode(
           [classesPythonCode, exercisePythonCodeData.code].join('\n')
         );
       })
-    );
+    )) as {
+      alternatives: string[];
+      comparators: unknown[];
+      identifiers: unknown[];
+      statement: string;
+    }[];
+    console.log(result);
 
-    console.log('AYUDA');
-
-    (window as any).a = result;
+    (window as any).a = completeLatexCode(tableUniqueSelection(result));
+    (window as any).b = result;
   }
 }

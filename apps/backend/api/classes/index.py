@@ -154,7 +154,7 @@ class Latex:
     return r'\ '
   
   def line_break():
-    return r'\hfill \break'
+    return r' \hfill \break '
 
 
 class Natural(Numeric):
