@@ -4,7 +4,6 @@ import flask_restful.reqparse
 import requests
 import datetime
 import db
-import random
 
 server = flask.Flask(__name__)
 api = flask_restful.Api(server)

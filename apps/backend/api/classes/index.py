@@ -1,6 +1,7 @@
 import math
 from typing import Union, List
 from abc import ABC, abstractmethod
+import random
 
 
 class Numeric(ABC):
@@ -97,54 +98,54 @@ class Literal(ABC):
     pass
 
 
-
-def decorator_add_spaces(fn):
-  def newFn(*arg, **kwarg):
-    return f' {fn(*arg, **kwarg)} '
-  return newFn
-
 class Latex:
-  decorator_add_spaces
-  def fraction(numerator: Union[str, int, float], denominator: Union[str, int, float]):
-    return fr'\dfrac{{{numerator}}}{{{denominator}}}'
 
-  decorator_add_spaces
+  def math_mode(expresion: str):
+    return f'$ {expresion} $'
+
+  def fraction(numerator: Union[str, int, float], denominator: Union[str, int, float]):
+    return fr' \dfrac{{{numerator}}}{{{denominator}}} '
+
   def overline(element: Union[str, int, float]):
-    return fr'\overline{{{element}}}'
+    return fr' \overline{{{element}}} '
   
-  decorator_add_spaces
   def decorator_mathrm(fn):
     def newFn(*arg, **kwargs): 
-      return fr'\mathrm{{{fn(*arg, **kwargs)}}}'
+      return fr' \mathrm{{{fn(*arg, **kwargs)}}} '
     return newFn
   
-  decorator_add_spaces
   def parenthesis(expression):
-    return fr'\left( {expression} \right)'
+    return fr' \left( {expression} \right) '
   
-  @decorator_add_spaces
   def brackets(expression):
-    return fr'\left[ {expression} \right]'
+    return fr' \left[ {expression} \right] '
   
-  @decorator_add_spaces
   def degree():
-    return r'\degree'
+    return r' \degree '
   
-  @decorator_add_spaces
   def leq():
-    return r'\leq'
+    return r' \leq '
   
-  @decorator_add_spaces
-  def leq():
-    return r'\geq'
+  def geq():
+    return r' \geq '
 
-  @decorator_add_spaces
   def different():
-    return r'\neq'
+    return r' \neq '
   
-  @decorator_add_spaces
   def percentage():
-    return r'\%'
+    return r' \% '
+  
+  def alpha():
+    return r' \alpha '
+  
+  def beta():
+    return r' \beta '
+  
+  def alpha():
+    return r' \gamma '
+  
+  def infinite():
+    return r' \infty '
 
 
 class Natural(Numeric):

@@ -14,17 +14,25 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 const initialCode = `
 def fn():
-  n1 = Rational(1, 2)
-  n2 = Rational(7, 5)
+  n1_numerator = random.randint(1, 10)
+  n1_denominator = random.randint(1, 10)
+  n2_numerator = random.randint(1, 10)
+  n2_denominator = random.randint(1, 10)
+
+  n1 = Rational(n1_numerator, n1_denominator)
+  n2 = Rational(n2_numerator, n2_denominator)
+
+  math_expression = Latex.math_mode(f'{n1} + {n2} =')
 
   return {
+    'statement': f'¿Cuál es el resultado de {math_expression}?',
     'alterantives': {
       'alternative_1': str(Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator())), # this is must be the correct one
       'alternative_2': str(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
       'alternative_3': str(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
       'alternative_4': str(n1 * n2),
       'alternative_5': str(n1 * n2 ** (-1))
-    }
+    },
     'comparator': {
       'alternative_1': Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator()),
       'alternative_2': Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
@@ -32,7 +40,7 @@ def fn():
       'alternative_4': n1 * n2,
       'alternative_5': n1 * n2 ** (-1)
     },
-    'identifiers': []
+    'identifiers': [n1, n2]
   }
 `.trim();
 

@@ -73,10 +73,6 @@ export class TestCreateComponent implements OnInit {
   }
 
   async createTest() {
-    const idsSelected = this.exercisesSelected.map(
-      (exerciseSelected) => exerciseSelected.id
-    );
-
     const classesPythonCodePromise = new Promise<string>((resolve) => {
       if (this.classesPythonCode !== undefined)
         return resolve(this.classesPythonCode);
@@ -92,13 +88,14 @@ export class TestCreateComponent implements OnInit {
       {
         id: number;
         code: string;
+        quantity: number;
       }[]
     >((resolve) => {
       const queryParams = new URLSearchParams();
       queryParams.append('columns', 'id');
       queryParams.append('columns', 'code');
-      idsSelected.forEach((idSelected) =>
-        queryParams.append('ids', String(idSelected))
+      this.exercisesSelected.forEach((exerciseSelected) =>
+        queryParams.append('ids', String(exerciseSelected.id))
       );
       this.httpClient
         .get<
@@ -107,8 +104,23 @@ export class TestCreateComponent implements OnInit {
             code: string;
           }[]
         >(`/api/exercises?${queryParams.toString()}`)
-        .subscribe((data) => {
-          resolve(data);
+        .subscribe((exercises) => {
+          const completeDatas: {
+            id: number;
+            code: string;
+            quantity: number;
+          }[] = [];
+          for (const exercise of exercises) {
+            const quantity = this.exercisesSelected.find(
+              (exerciseSelected) => exerciseSelected.id === exercise.id
+            )?.quantity;
+            if (quantity === undefined) continue;
+            completeDatas.push({
+              ...exercise,
+              quantity,
+            });
+          }
+          resolve(completeDatas);
         });
     });
 
@@ -124,7 +136,5 @@ export class TestCreateComponent implements OnInit {
         );
       })
     );
-
-    (window as any).a = result[0];
   }
 }
