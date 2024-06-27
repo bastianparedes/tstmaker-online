@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-const runPythonCode = async (pythonFnCode: string) => {
+const runPythonCode = async <T>(pythonFnCode: string): Promise<T> => {
   loadPyScript();
   const nameWindowProperty = (() => {
     const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

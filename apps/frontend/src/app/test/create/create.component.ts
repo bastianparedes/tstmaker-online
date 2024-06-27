@@ -78,6 +78,8 @@ export class TestCreateComponent implements OnInit {
   }
 
   async createTest() {
+    console.log(this.exercisesSelected);
+    return;
     const classesPythonCodePromise = new Promise<string>((resolve) => {
       if (this.classesPythonCode !== undefined)
         return resolve(this.classesPythonCode);
@@ -130,18 +132,22 @@ export class TestCreateComponent implements OnInit {
     });
     Promise.all([classesPythonCodePromise, exercisesPythonCodeDataPromise])
       .then(async ([classesPythonCode, exercisesPythonCodeData]) => {
-        return (await Promise.all(
-          exercisesPythonCodeData.map((exercisePythonCodeData) => {
-            return runPythonCode(
-              [classesPythonCode, exercisePythonCodeData.code].join('\n')
-            );
-          })
-        )) as {
-          alternatives: string[];
-          comparators: unknown[];
-          identifiers: unknown[];
+        const exercises: Promise<{
           statement: string;
-        }[];
+          alternatives: string[];
+        }>[] = [];
+        exercisesPythonCodeData.forEach((exercisePythonCodeData) => {
+          for (let i = 0; i < exercisePythonCodeData.quantity; i++) {
+            const exercise = runPythonCode<{
+              alternatives: string[];
+              comparators: unknown[];
+              identifiers: unknown[];
+              statement: string;
+            }>([classesPythonCode, exercisePythonCodeData.code].join('\n'));
+            exercises.push(exercise);
+          }
+        });
+        return Promise.all(exercises);
       })
       .then((result) => completeLatexCode(tableUniqueSelection(result)))
       .then((latexCode) =>
