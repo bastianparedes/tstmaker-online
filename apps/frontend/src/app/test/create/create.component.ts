@@ -13,13 +13,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { runPythonCode } from '../../utils/pyscript';
 import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { LoaderComponent } from '../../common/loader/loader.component';
 
-type Exercise = {
+type Exercises = {
   id: number;
   name: string;
-};
-
-type ExerciseWithQuantity = Exercise & {
   quantity: number;
 };
 
@@ -35,12 +33,19 @@ type ExerciseWithQuantity = Exercise & {
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    LoaderComponent,
   ],
 })
 export class TestCreateComponent implements OnInit {
-  exercises: ExerciseWithQuantity[] = [];
-  exercisesSelected: ExerciseWithQuantity[] = [];
-  isCreatingPdf = false;
+  isLoading = {
+    initialLoad: true,
+    creatingPdf: false,
+  };
+  isAtLeastOneExerciseSelectedWithQuantityNotZero = false;
+  exercises = {
+    unselected: [] as Exercises[],
+    selected: [] as Exercises[],
+  };
   httpClient = inject(HttpClient);
   classesPythonCode: string | undefined = undefined;
   pdfUrl: undefined | SafeResourceUrl = undefined;
@@ -51,16 +56,34 @@ export class TestCreateComponent implements OnInit {
     this.httpClient
       .get('/api/exercises?columns=id&columns=name')
       .subscribe((data) => {
-        this.exercises = (data as Exercise[]).map((exercise) => {
+        const exercises = (
+          data as {
+            id: number;
+            name: string;
+          }[]
+        ).map((exercise) => {
           return {
-            ...exercise,
+            id: exercise.id,
+            name: exercise.name,
             quantity: 0,
           };
         });
+        this.exercises.unselected = exercises;
+        this.isLoading.initialLoad = false;
       });
   }
 
-  drop(event: CdkDragDrop<ExerciseWithQuantity[]>) {
+  updateQuantity(id: number, event: Event) {
+    const exercise = this.exercises.selected.find(
+      (exerciseInList) => exerciseInList.id === id
+    );
+    if (exercise === undefined) return;
+    exercise.quantity = Number((event.target as HTMLInputElement).value);
+    this.isAtLeastOneExerciseSelectedWithQuantityNotZero =
+      this.exercises.selected.some((exercise) => exercise.quantity > 0);
+  }
+
+  drop(event: CdkDragDrop<Exercises[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -78,8 +101,10 @@ export class TestCreateComponent implements OnInit {
   }
 
   async createTest() {
-    console.log(this.exercisesSelected);
-    return;
+    this.isLoading.creatingPdf = true;
+    const exercisesSelected = this.exercises.selected.filter(
+      (exercise) => exercise.quantity > 0
+    );
     const classesPythonCodePromise = new Promise<string>((resolve) => {
       if (this.classesPythonCode !== undefined)
         return resolve(this.classesPythonCode);
@@ -101,7 +126,7 @@ export class TestCreateComponent implements OnInit {
       const queryParams = new URLSearchParams();
       queryParams.append('columns', 'id');
       queryParams.append('columns', 'code');
-      this.exercisesSelected.forEach((exerciseSelected) =>
+      exercisesSelected.forEach((exerciseSelected) =>
         queryParams.append('ids', String(exerciseSelected.id))
       );
       this.httpClient
@@ -118,13 +143,13 @@ export class TestCreateComponent implements OnInit {
             quantity: number;
           }[] = [];
           for (const exercise of exercises) {
-            const quantity = this.exercisesSelected.find(
+            const quantity = exercisesSelected.find(
               (exerciseSelected) => exerciseSelected.id === exercise.id
             )?.quantity;
             if (quantity === undefined) continue;
             completeDatas.push({
               ...exercise,
-              quantity,
+              quantity: quantity,
             });
           }
           resolve(completeDatas);
@@ -164,6 +189,9 @@ export class TestCreateComponent implements OnInit {
       .then((response) => response.text())
       .then((pdfUrl) => {
         this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+      })
+      .finally(() => {
+        this.isLoading.creatingPdf = false;
       });
   }
 }

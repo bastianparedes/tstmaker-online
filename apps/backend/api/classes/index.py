@@ -109,11 +109,6 @@ class Latex:
   def overline(element: Union[str, int, float]):
     return fr' \overline{{{element}}} '
   
-  def decorator_mathrm(fn):
-    def newFn(*arg, **kwargs): 
-      return fr' \mathrm{{{fn(*arg, **kwargs)}}} '
-    return newFn
-  
   def parenthesis(expression):
     return fr' \left( {expression} \right) '
   
@@ -554,7 +549,6 @@ class Rational(Numeric):
   def __abs__(self):
     return Rational(abs(self.__numerator), abs(self.__denominator))
 
-  @Latex.decorator_mathrm
   def __str__(self):
     if self.__is_decimal_loaded:
       if not isinstance(self.__integer_part, int):
@@ -574,6 +568,8 @@ class Rational(Numeric):
 
     if (self.__is_simplified):
       sign = '-' if float(self) < 0 else ''
+      if self.__denominator == 1:
+        return str(self.__numerator)
       return sign + Latex.fraction(abs(self.__numerator), abs(self.__denominator))
 
     return Latex.fraction(self.__numerator, self.__denominator)
@@ -742,4 +738,3 @@ class Trigonometric_function(Numeric):
       return 1 / math.tan(self.__radians)
 
     raise Exception(f'fn_name in {type(self)} must be one of {self.__valid_fn_names}')
-

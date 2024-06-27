@@ -79,7 +79,6 @@ export class ExerciseEditComponent implements OnInit {
   async save(event: SubmitEvent) {
     event.preventDefault();
     if (this.exercise === undefined || !this.exercise.valid) return;
-    console.log(this.exercise.value);
 
     const response = await fetch(`/api/exercises/${this.id}`, {
       body: JSON.stringify(this.exercise.value),

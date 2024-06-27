@@ -111,7 +111,6 @@ api.add_resource(Specific_exercise, '/api/exercises/<int:id>')
 def pdf_url():
   request_data = flask.request.get_json()
   latex_code = request_data['latex_code']
-  print(latex_code, flush=True)
   response = requests.post(
     'https://texlive.net/cgi-bin/latexcgi',
     files={
@@ -120,7 +119,7 @@ def pdf_url():
       'engine': 'pdflatex',
       'return': 'pdf'
     })
-  print(response.url, flush=True)
+  # print(response.url, flush=True)
   return response.url
 
 @server.route('/api/classes', methods=['GET'])

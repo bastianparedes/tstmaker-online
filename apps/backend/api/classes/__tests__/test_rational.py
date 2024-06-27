@@ -21,10 +21,13 @@ def test_simplify():
 
 def test_str():
   rational = Rational(-4, -6)
-  assert str(rational) == r'\dfrac{-4}{-6}'
+  assert str(rational) == r' \dfrac{-4}{-6} '
 
   rational.simplify()
-  assert str(rational) == r'\dfrac{2}{3}'
+  assert str(rational) == r' \dfrac{2}{3} '
+
+  rational = Rational(8, -4).simplify()
+  assert str(rational) == '-2'
 
 
 def test_int():
