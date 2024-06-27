@@ -5,7 +5,7 @@
     class="mt-5"
     (click)="createTest()"
     [disabled]="this.exercisesSelected.length === 0">
-    Save
+    Create test
   </button>
   <div class="flex">
     <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
@@ -63,3 +63,10 @@
     </div>
   </div>
 </div>
+@if (pdfUrl !== undefined) {
+  <div class="relative w-full px-5">
+    <div class="relative w-auto h-[1150px]">
+      <embed class="w-full h-full" [src]="pdfUrl" type="application/pdf" />
+    </div>
+  </div>
+}

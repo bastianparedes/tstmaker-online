@@ -34,10 +34,6 @@ const completeLatexCode = (body: string) => {
   ].join('\n');
 };
 
-const exerciseStatements = Object.freeze({
-  uniqueSelection: 'Encierra la alternativa correcta de cada ejercicio.',
-});
-
 const tableUniqueSelection = (
   exercises: {
     statement: string;
@@ -60,6 +56,7 @@ const tableUniqueSelection = (
     exercise.alternatives.forEach((alternative) => {
       latexLines.push('\\item%');
       latexLines.push(alternative + '%');
+      latexLines.push('\\hfill \\break%');
     });
     latexLines.push('\\end{enumerate}%');
 
@@ -78,4 +75,4 @@ const tableUniqueSelection = (
   return latexLines.join('\n');
 };
 
-export { completeLatexCode, exerciseStatements, tableUniqueSelection };
+export { completeLatexCode, tableUniqueSelection };

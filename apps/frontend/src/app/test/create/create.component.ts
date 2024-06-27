@@ -11,7 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { runPythonCode } from '../../utils/pyscript';
-import { completeLatexCode, exerciseStatements, tableUniqueSelection } from '../../utils/latex';
+import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 type Exercise = {
   id: number;
@@ -39,9 +40,12 @@ type ExerciseWithQuantity = Exercise & {
 export class TestCreateComponent implements OnInit {
   exercises: ExerciseWithQuantity[] = [];
   exercisesSelected: ExerciseWithQuantity[] = [];
-  isLoading = true;
+  isCreatingPdf = false;
   httpClient = inject(HttpClient);
   classesPythonCode: string | undefined = undefined;
+  pdfUrl: undefined | SafeResourceUrl = undefined;
+
+  constructor(public sanitizer: DomSanitizer) {}
 
   async ngOnInit() {
     this.httpClient
@@ -124,27 +128,36 @@ export class TestCreateComponent implements OnInit {
           resolve(completeDatas);
         });
     });
-
-    const [classesPythonCode, exercisesPythonCodeData] = await Promise.all([
-      classesPythonCodePromise,
-      exercisesPythonCodeDataPromise,
-    ]);
-
-    const result = (await Promise.all(
-      exercisesPythonCodeData.map((exercisePythonCodeData) => {
-        return runPythonCode(
-          [classesPythonCode, exercisePythonCodeData.code].join('\n')
-        );
+    Promise.all([classesPythonCodePromise, exercisesPythonCodeDataPromise])
+      .then(async ([classesPythonCode, exercisesPythonCodeData]) => {
+        return (await Promise.all(
+          exercisesPythonCodeData.map((exercisePythonCodeData) => {
+            return runPythonCode(
+              [classesPythonCode, exercisePythonCodeData.code].join('\n')
+            );
+          })
+        )) as {
+          alternatives: string[];
+          comparators: unknown[];
+          identifiers: unknown[];
+          statement: string;
+        }[];
       })
-    )) as {
-      alternatives: string[];
-      comparators: unknown[];
-      identifiers: unknown[];
-      statement: string;
-    }[];
-    console.log(result);
-
-    (window as any).a = completeLatexCode(tableUniqueSelection(result));
-    (window as any).b = result;
+      .then((result) => completeLatexCode(tableUniqueSelection(result)))
+      .then((latexCode) =>
+        fetch('/api/pdf_url', {
+          body: JSON.stringify({
+            latex_code: latexCode,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        })
+      )
+      .then((response) => response.text())
+      .then((pdfUrl) => {
+        this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+      });
   }
 }
