@@ -45,7 +45,7 @@ const tableUniqueSelection = (
   }[]
 ) => {
   const latexLines = [
-    '\textbf{Item selección múltiple:} Encierra la alternativa correcta de cada ejercicio.%',
+    '\\textbf{Item selección múltiple:} Encierra la alternativa correcta de cada ejercicio.%',
     '\\begin{longtable}{|p{0.475\\linewidth}|p{0.475\\linewidth}|} \\hline%',
   ];
 
