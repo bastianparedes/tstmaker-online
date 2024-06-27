@@ -146,6 +146,15 @@ class Latex:
   
   def infinite():
     return r' \infty '
+  
+  def pi():
+    return r'\pi'
+  
+  def space():
+    return r'\ '
+  
+  def line_break():
+    return r'\hfill \break'
 
 
 class Natural(Numeric):

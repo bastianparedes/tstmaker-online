@@ -124,10 +124,13 @@ export class TestCreateComponent implements OnInit {
         });
     });
 
+    console.log('AYUDA');
+
     const [classesPythonCode, exercisesPythonCodeData] = await Promise.all([
       classesPythonCodePromise,
       exercisesPythonCodeDataPromise,
     ]);
+    console.log('AYUDA');
 
     const result = await Promise.all(
       exercisesPythonCodeData.map((exercisePythonCodeData) => {
@@ -136,5 +139,9 @@ export class TestCreateComponent implements OnInit {
         );
       })
     );
+
+    console.log('AYUDA');
+
+    (window as any).a = result;
   }
 }

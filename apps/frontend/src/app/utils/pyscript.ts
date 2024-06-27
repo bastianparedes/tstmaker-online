@@ -19,8 +19,6 @@ const runPythonCode = async (pythonFnCode: string) => {
     `window.${nameWindowProperty} = ffi.to_js(fn())`,
   ].join('\n');
 
-  console.log(fullCode);
-
   const pyScript = document.createElement('py-script');
   pyScript.id = nameWindowProperty;
   pyScript.innerHTML = fullCode;
