@@ -38,6 +38,6 @@ const exerciseStatements = Object.freeze({
   uniqueSelection: 'Encierra la alternativa correcta de cada ejercicio.',
 });
 
-const lineBreak = '\\hfill \\break';
+const lineBreak = '\\hfill \\break%';
 
 export { completeLatexCode, exerciseStatements, lineBreak };
