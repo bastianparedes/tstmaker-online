@@ -14,11 +14,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { catchError, throwError } from 'rxjs';
 
-type Exercise = {
+interface Exercise {
   name: string;
   description: string;
   code: string;
-};
+}
 
 @Component({
   selector: 'app-new-exercise',

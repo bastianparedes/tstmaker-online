@@ -15,11 +15,11 @@ import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../common/loader/loader.component';
 
-type Exercises = {
+interface Exercises {
   id: number;
   name: string;
   quantity: number;
-};
+}
 
 @Component({
   selector: 'app-test-create',

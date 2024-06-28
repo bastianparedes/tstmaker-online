@@ -5,12 +5,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 
 
-type Exercise = {
+interface Exercise {
   id: number;
   name: string;
   description: string;
   last_modified_date: string;
-};
+}
 
 @Component({
   selector: 'app-exercises-all',
