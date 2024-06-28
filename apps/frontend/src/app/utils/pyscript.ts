@@ -5,7 +5,7 @@ const runPythonCode = async <T>(pythonFnCode: string): Promise<T> => {
   const nameWindowProperty = (() => {
     const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     let resultado = '';
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < letras.length; i++) {
       const indiceAleatorio = Math.floor(Math.random() * letras.length);
       resultado += letras[indiceAleatorio];
     }
