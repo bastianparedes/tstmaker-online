@@ -175,8 +175,8 @@ export class TestCreateComponent implements OnInit {
         return Promise.all(exercises);
       })
       .then((result) => completeLatexCode(tableUniqueSelection(result)))
-      .then((latexCode) =>
-        fetch('/api/pdf_url', {
+      .then((latexCode) => {
+        return fetch('/api/pdf_url', {
           body: JSON.stringify({
             latex_code: latexCode,
           }),
@@ -184,8 +184,8 @@ export class TestCreateComponent implements OnInit {
             'Content-Type': 'application/json',
           },
           method: 'POST',
-        })
-      )
+        });
+      })
       .then((response) => response.text())
       .then((pdfUrl) => {
         this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
