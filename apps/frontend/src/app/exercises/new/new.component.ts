@@ -16,11 +16,11 @@ const initialCode = `
 def fn():
   n1_numerator = random.randint(1, 10)
   n1_denominator = random.randint(1, 10)
-  n2_numerator = random.randint(1, 10)
-  n2_denominator = random.randint(1, 10)
+  n2_numerator = random.randint(2, 10)
+  n2_denominator = random.randint(2, 10)
 
-  n1 = Rational(n1_numerator, n1_denominator)
-  n2 = Rational(n2_numerator, n2_denominator)
+  n1 = Rational(n1_numerator, n1_denominator).simplify()
+  n2 = Rational(n2_numerator, n2_denominator).simplify()
 
   math_expression = Latex.math_mode(f'{n1} + {n2}')
 
@@ -34,7 +34,7 @@ def fn():
       Latex.math_mode(n1 * n2 ** (-1))
     ],
     'comparators': [
-      Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator()),
+      n1 + n2,
       Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
       Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator()),
       n1 * n2,
