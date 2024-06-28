@@ -393,7 +393,7 @@ class Rational(Numeric):
     return self
 
   def load_decimal(self):
-    if self.__is_decimal_loaded:
+    if not self.__is_decimal_loaded:
       self.__is_decimal_loaded = True
 
       helper = Rational(self.__numerator, self.__denominator).simplify()

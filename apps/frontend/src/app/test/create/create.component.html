@@ -2,19 +2,19 @@
   <app-loader></app-loader>
 }
 
-<div>
+<div class="p-10">
   <button
     mat-flat-button
     color="accent"
-    class="mt-5"
+    class="mb-5"
     (click)="createTest()"
     [disabled]="
       !isAtLeastOneExerciseSelectedWithQuantityNotZero || isLoading.creatingPdf
     ">
     Create test
   </button>
-  <div class="flex">
-    <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
+  <div class="flex gap-10">
+    <div class="flex-1">
       <h2>Available</h2>
       <div
         id="exercises"
@@ -33,7 +33,7 @@
         }
       </div>
     </div>
-    <div class="w-96 max-w-full mr-6 mb-6 inline-block align-top">
+    <div class="flex-1">
       <h2>Selected</h2>
       <div
         id="exercisesSelected"

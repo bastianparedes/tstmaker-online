@@ -20,7 +20,7 @@ const packages = `
 \\usepackage{fourier}%
 \\usepackage{fancyhdr}%
 %\\usepackage[papersize={21.59cm, 27.94cm}, tmargin=2.0cm, bmargin=2.0cm, lmargin=2.0cm, rmargin=2.0cm]{geometry}%
-\\usepackage[a4paper, margin=1cm]{geometry}%
+\\usepackage[a4paper, margin=1cm, bmargin=2cm]{geometry}%
 \\usetikzlibrary{fit, shapes.geometric, quotes, angles, through, intersections}%
 `.trim();
 

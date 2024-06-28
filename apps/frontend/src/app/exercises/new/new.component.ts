@@ -27,7 +27,7 @@ def fn():
   return {
     'statement': f'¿Cuál es el resultado de {math_expression}?',
     'alternatives': [
-      Latex.math_mode(Rational(n1.get_numerator() + n2.get_numerator(), n1.get_denominator() + n2.get_denominator())), # this is must be the correct one
+      Latex.math_mode(n1 + n2), # this is must be the correct one
       Latex.math_mode(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
       Latex.math_mode(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
       Latex.math_mode(n1 * n2),
