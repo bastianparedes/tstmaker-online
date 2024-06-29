@@ -13,12 +13,12 @@ interface Exercise {
 }
 
 @Component({
-  selector: 'app-exercises-all',
-  templateUrl: './all.component.html',
+  selector: 'app-exercises',
+  templateUrl: './exercises.component.html',
   standalone: true,
   imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule],
 })
-export class ExercisesAllComponent implements OnInit {
+export class ExercisesComponent implements OnInit {
   displayedColumns = [
     'id',
     'name',

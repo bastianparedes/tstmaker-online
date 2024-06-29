@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input, inject } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -10,8 +11,15 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { catchError, throwError } from 'rxjs';
 
-const initialCode = `
+interface Exercise {
+  name: string;
+  description: string;
+  code: string;
+}
+
+const defaultCode = `
 def fn():
   n1_numerator = random.randint(1, 10)
   n1_denominator = random.randint(1, 10)
@@ -44,9 +52,10 @@ def fn():
 `.trim();
 
 @Component({
-  selector: 'app-new-exercise',
+  selector: 'app-exercise',
   standalone: true,
   imports: [
+    HttpClientModule,
     MatInputModule,
     MatFormFieldModule, // ¿no necesario?
     MatButtonModule,
@@ -54,33 +63,71 @@ def fn():
     ReactiveFormsModule,
     MonacoEditorModule,
   ],
-  templateUrl: './new.component.html',
+  templateUrl: './exercise.component.html',
 })
-export class ExerciseNewComponent {
-  exercise = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+export class ExerciseComponent implements OnInit {
+  @Input() id!: undefined | string;
+  exercise =  new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(100),
+    ]),
     description: new FormControl('', [
       Validators.required,
       Validators.minLength(1),
+      Validators.maxLength(100),
     ]),
-    code: new FormControl(initialCode, [
+    code: new FormControl(defaultCode, [
       Validators.required,
       Validators.minLength(1),
     ]),
   });
+  isNewExercise = this.id === undefined;
+  httpClient = inject(HttpClient);
+
+  ngOnInit() {
+    if (this.id === undefined) {
+      this.exercise.setValue({
+        name: '',
+        description: '',
+        code: defaultCode
+      });
+
+      return;
+    }
+
+    this.httpClient
+      .get(
+        `/api/exercises/${this.id}?columns=name&columns=description&columns=code`
+      )
+      .pipe(
+        catchError(() => {
+          location.href = '/exercises';
+          return throwError(() => new Error('Element not found'));
+        })
+      )
+      .subscribe((data) => {
+        const typedData = data as Exercise;
+        this.exercise.setValue({
+          name: typedData.name,
+          description: typedData.description,
+          code: typedData.code
+        });
+      });
+  }
 
   async save(event: SubmitEvent) {
     event.preventDefault();
     if (!this.exercise.valid) return;
 
-    const response = await fetch('/api/exercises', {
+    await fetch(`/api/exercises${this.isNewExercise ? '' : '/' + this.id}`, {
       body: JSON.stringify(this.exercise.value),
       headers: {
         'Content-Type': 'application/json',
       },
-      method: 'POST',
+      method: this.isNewExercise ? 'PUT' : 'POST',
     });
 
-    if (response.ok) location.href = '/exercises';
+    // location.href = '/exercises';
   }
 }

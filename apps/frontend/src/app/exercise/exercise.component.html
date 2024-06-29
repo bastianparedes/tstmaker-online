@@ -2,13 +2,14 @@
   <div>
     <mat-form-field class="w-full">
       <mat-label>Name</mat-label>
-      <input matInput placeholder="New Exercise" formControlName="name" />
+      <input matInput maxlength="100" placeholder="New Exercise" formControlName="name" />
     </mat-form-field>
 
     <mat-form-field class="w-full">
       <mat-label>Description</mat-label>
       <textarea
         matInput
+        maxlength="100"
         placeholder="Description new exercise"
         formControlName="description"></textarea>
     </mat-form-field>
@@ -28,7 +29,9 @@
 
     <div class="flex gap-5 mt-5">
       <button mat-flat-button color="accent" class="mt-5">Save</button>
-      <a mat-flat-button color="warn" class="mt-5" href="/exercises">Cancel</a>
+      <a mat-flat-button color="warn" class="mt-5" href="/exercises"
+        >Cancel</a
+      >
     </div>
   </div>
 </form>

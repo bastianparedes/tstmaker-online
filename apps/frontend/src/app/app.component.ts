@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { SidebarComponent } from './common/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatIconModule],
+  imports: [RouterOutlet, SidebarComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {}

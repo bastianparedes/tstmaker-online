@@ -1,13 +1,12 @@
 import type { Routes } from '@angular/router';
-import { ExercisesAllComponent } from './exercises/all/all.component';
-import { ExerciseEditComponent } from './exercises/edit/edit.component';
-import { ExerciseNewComponent } from './exercises/new/new.component';
+import { ExerciseComponent } from './exercise/exercise.component';
+import { ExercisesComponent } from './exercises/exercises.component';
 import { TestCreateComponent } from './test/create/create.component';
 
 export const routes: Routes = [
-  { path: 'exercises', component: ExercisesAllComponent },
-  { path: 'exercises/edit/:id', component: ExerciseEditComponent },
-  { path: 'exercises/new', component: ExerciseNewComponent },
+  { path: 'exercises', component: ExercisesComponent },
+  { path: 'exercise', component: ExerciseComponent },
+  { path: 'exercise/:id', component: ExerciseComponent },
   { path: 'test/create', component: TestCreateComponent },
   { path: '', redirectTo: 'exercises', pathMatch: 'full' },
 ];
