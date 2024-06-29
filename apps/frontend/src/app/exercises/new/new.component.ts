@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { EditorComponent } from '../common/editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -50,7 +49,6 @@ def fn():
   imports: [
     MatInputModule,
     MatFormFieldModule, // ¿no necesario?
-    EditorComponent,
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,

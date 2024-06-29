@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { EditorComponent } from '../common/editor/editor.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
@@ -27,7 +26,6 @@ interface Exercise {
     HttpClientModule,
     MatInputModule,
     MatFormFieldModule, // ¿no necesario?
-    EditorComponent,
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
