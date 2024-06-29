@@ -18,6 +18,7 @@ import { LoaderComponent } from '../../common/loader/loader.component';
 interface Exercises {
   id: number;
   name: string;
+  description: string;
   quantity: number;
 }
 
@@ -53,18 +54,22 @@ export class TestCreateComponent implements OnInit {
   constructor(public sanitizer: DomSanitizer) {}
 
   async ngOnInit() {
+    const queryParams = new URLSearchParams();
+    queryParams.append('columns', 'id');
+    queryParams.append('columns', 'name');
+    queryParams.append('columns', 'description');
     this.httpClient
-      .get('/api/exercises?columns=id&columns=name')
+      .get(`/api/exercises?${queryParams.toString()}`)
       .subscribe((data) => {
         const exercises = (
           data as {
             id: number;
+            description: string;
             name: string;
           }[]
         ).map((exercise) => {
           return {
-            id: exercise.id,
-            name: exercise.name,
+            ...exercise,
             quantity: 0,
           };
         });

@@ -25,10 +25,15 @@
         (cdkDropListDropped)="drop($event)">
         @for (exercise of exercises.unselected; track exercise.id) {
           <div
-            class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
+            class="exercise py-1 px-3 border-solid border-b-2 border-gray-500 flex gap-1 flex-col box-border cursor-move bg-white items-start content-start last:border-0"
             [cdkDragData]="exercise.id"
             cdkDrag>
-            {{ exercise.id }}: {{ exercise.name }}
+            <div class="text-black text-lg">
+              ({{ exercise.id }}) {{ exercise.name }}
+            </div>
+            <div class="text-gray-500  text-base">
+              {{ exercise.description }}
+            </div>
           </div>
         }
       </div>
@@ -44,7 +49,7 @@
         (cdkDropListDropped)="drop($event)">
         @for (exercise of exercises.selected; track exercise.id) {
           <div
-            class="exercise py-5 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-4 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
+            class="exercise py-1 px-3 border-solid border-b-2 border-gray-500 text-black flex gap-1 flex-col box-border cursor-move bg-white text-xl items-start content-start last:border-0"
             cdkDrag
             [cdkDragData]="exercise.id">
             <div>
