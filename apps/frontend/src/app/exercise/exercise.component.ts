@@ -82,11 +82,12 @@ export class ExerciseComponent implements OnInit {
       Validators.minLength(1),
     ]),
   });
-  isNewExercise = this.id === undefined;
+  isNewExercise!: boolean;
   httpClient = inject(HttpClient);
 
   ngOnInit() {
-    if (this.id === undefined) {
+    this.isNewExercise = this.id === undefined;
+    if (this.isNewExercise) {
       this.exercise.setValue({
         name: '',
         description: '',
@@ -120,14 +121,15 @@ export class ExerciseComponent implements OnInit {
     event.preventDefault();
     if (!this.exercise.valid) return;
 
-    await fetch(`/api/exercises${this.isNewExercise ? '' : '/' + this.id}`, {
+    const url = this.isNewExercise ? '/api/exercises' : `/api/exercises/${this.id}`
+    await fetch(url, {
       body: JSON.stringify(this.exercise.value),
       headers: {
         'Content-Type': 'application/json',
       },
-      method: this.isNewExercise ? 'PUT' : 'POST',
+      method: this.isNewExercise ? 'POST' : 'PUT',
     });
 
-    // location.href = '/exercises';
+    location.href = '/exercises';
   }
 }
