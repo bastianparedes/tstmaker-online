@@ -55,11 +55,14 @@ class Full_exercise(flask_restful.Resource):
     items_per_page = args['items_per_page']
 
     exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id).paginate(page_number, items_per_page)
-    pages = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).count()
     if len(ids) != 0:
       exercises = exercises.where(db.Exercises.id.in_(ids))
 
-    print(exercises, flush=True)
+    tota_exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).count()
+    pages = tota_exercises // items_per_page
+    if tota_exercises % items_per_page > 0:
+      pages += 1
+
     return flask.jsonify({
       'exercises': list(exercises.dicts()),
       'pages': pages

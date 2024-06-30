@@ -137,6 +137,19 @@ export class ExerciseComponent implements OnInit {
       method: this.isNewExercise ? 'POST' : 'PUT',
     });
 
+    // if (this.isNewExercise) {
+    //   for (let i = 0; i < 1000 ; i++) {
+    //     await fetch(url, {
+    //       body: JSON.stringify(this.exercise.value),
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       method: this.isNewExercise ? 'POST' : 'PUT',
+    //     });
+    //   }
+    // }
+
+
     location.href = '/exercises';
   }
 }
