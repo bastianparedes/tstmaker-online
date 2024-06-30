@@ -14,7 +14,7 @@ import { runPythonCode } from '../../utils/pyscript';
 import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../common/loader/loader.component';
-import { everyElementIsDifferent } from '../../utils/array';
+import { everyElementIsDifferent, arrayIncludesElement } from '../../utils/array';
 
 interface Exercises {
   id: number;
@@ -79,7 +79,11 @@ export class TestCreateComponent implements OnInit {
       });
   }
 
-  updateQuantity(id: number, event: Event) {
+  updateQuantityWithKeyboard(event: KeyboardEvent) {
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') event.preventDefault();
+  }
+
+  updateQuantity(event: Event, id: number) {
     const exercise = this.exercises.selected.find(
       (exerciseInList) => exerciseInList.id === id
     );
@@ -168,18 +172,20 @@ export class TestCreateComponent implements OnInit {
           alternatives: string[];
         }[] = [];
         for (const exercisePythonCodeData of exercisesPythonCodeData) {
-          const statements: unknown[] = [];
+          const identifiersUsed: unknown[] = [];
           for (let i = 0; i < exercisePythonCodeData.quantity; i++) {
             for (let tryCount = 0 ; tryCount < 30 ; tryCount++) {
               const exercise = await runPythonCode<{
                 alternatives: string[];
                 comparators: unknown[];
-                identifiers: unknown[];
+                identifiers: unknown;
                 statement: string;
               } | undefined>([classesPythonCode, exercisePythonCodeData.code].join('\n'));
               if (exercise === undefined) continue;
               if (everyElementIsDifferent(exercise.comparators)) continue;
+              if (arrayIncludesElement(identifiersUsed, exercise.identifiers)) continue;
 
+              identifiersUsed.push(exercise.identifiers);
               exercises.push(exercise);
               break;
             }

@@ -10,4 +10,11 @@ const everyElementIsDifferent = <T>(array: T[]) => {
   return true;
 }
 
-export { everyElementIsDifferent };
+const arrayIncludesElement = <T, U>(array: T[], element: U) => {
+  return array.some(item => {
+    return JSON.stringify(item) === JSON.stringify(element);
+  });
+}
+
+export { everyElementIsDifferent, arrayIncludesElement };
+

@@ -66,8 +66,10 @@
                 class="example-right-align"
                 placeholder="0"
                 min="0"
+                max="5"
+                (keydown)="updateQuantityWithKeyboard($event)"
                 [value]="exercise.quantity"
-                (input)="updateQuantity(exercise.id, $event)" />
+                (input)="updateQuantity($event, exercise.id)" />
             </mat-form-field>
           </div>
         }

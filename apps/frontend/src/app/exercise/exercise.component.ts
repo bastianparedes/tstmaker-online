@@ -21,15 +21,16 @@ interface Exercise {
 
 const defaultCode = `
 def fn():
-  n1_numerator = random.randint(1, 10)
-  n1_denominator = random.randint(1, 10)
-  n2_numerator = random.randint(2, 10)
-  n2_denominator = random.randint(2, 10)
+  n1_numerator = random.randint(1, 12)
+  n1_denominator = random.randint(1, 12)
+  n2_numerator = random.randint(2, 12)
+  n2_denominator = random.randint(2, 12)
 
   n1 = Rational(n1_numerator, n1_denominator).simplify()
   n2 = Rational(n2_numerator, n2_denominator).simplify()
 
-  if n1 == n2 or n1.get_denominator() == 1 or n2.get_denominator() == 1:
+  # Obliga que las fracciones tengan distintos denominadores y estos sean distintos de 1
+  if not (n1.get_denominator() != n2.get_denominator() and n1.get_denominator() != 1 and n2.get_denominator() != 1):
     return;
 
   math_expression = Latex.math_mode(f'{n1} + {n2}')
@@ -37,7 +38,7 @@ def fn():
   return {
     'statement': f'¿Cuál es el resultado de {math_expression}?',
     'alternatives': [
-      Latex.math_mode(n1 + n2), # this is must be the correct one
+      Latex.math_mode(n1 + n2), # Esta debe ser la respuesta correcta
       Latex.math_mode(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
       Latex.math_mode(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
       Latex.math_mode(n1 * n2),
