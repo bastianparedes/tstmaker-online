@@ -162,22 +162,28 @@ export class TestCreateComponent implements OnInit {
     });
     Promise.all([classesPythonCodePromise, exercisesPythonCodeDataPromise])
       .then(async ([classesPythonCode, exercisesPythonCodeData]) => {
-        const exercises: Promise<{
+        const exercises: {
           statement: string;
           alternatives: string[];
-        }>[] = [];
-        exercisesPythonCodeData.forEach((exercisePythonCodeData) => {
+        }[] = [];
+        for (const exercisePythonCodeData of exercisesPythonCodeData) {
           for (let i = 0; i < exercisePythonCodeData.quantity; i++) {
-            const exercise = runPythonCode<{
-              alternatives: string[];
-              comparators: unknown[];
-              identifiers: unknown[];
-              statement: string;
-            }>([classesPythonCode, exercisePythonCodeData.code].join('\n'));
-            exercises.push(exercise);
+            for (let tryCount = 0 ; tryCount < 15 ; tryCount++) {
+              const exercise = await runPythonCode<{
+                alternatives: string[];
+                comparators: unknown[];
+                identifiers: unknown[];
+                statement: string;
+              } | undefined>([classesPythonCode, exercisePythonCodeData.code].join('\n'));
+              if (exercise !== undefined) {
+                exercises.push(exercise);
+                break;
+              }
+            }
+            
           }
-        });
-        return Promise.all(exercises);
+        }
+        return exercises;
       })
       .then((result) => completeLatexCode(tableUniqueSelection(result)))
       .then((latexCode) => {

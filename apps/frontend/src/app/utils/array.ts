@@ -1,5 +1,5 @@
 const everyElementIsDifferent = <T>(array: T[]) => {
-  const set = new Set<T>();
+  const set = new Set();
   for (const element of array) {
     if (set.has(element)) {
       return false;
