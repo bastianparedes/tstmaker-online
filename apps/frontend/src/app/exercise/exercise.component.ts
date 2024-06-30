@@ -13,12 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { catchError, throwError } from 'rxjs';
 
-interface Exercise {
-  name: string;
-  description: string;
-  code: string;
-}
-
 const defaultCode = `
 def fn():
   n1_numerator = random.randint(1, 12)
@@ -116,7 +110,12 @@ export class ExerciseComponent implements OnInit {
         })
       )
       .subscribe((data) => {
-        const typedData = data as Exercise;
+        
+        const typedData = data as {
+          name: string;
+          description: string;
+          code: string;
+        };
         this.exercise.setValue({
           name: typedData.name,
           description: typedData.description,

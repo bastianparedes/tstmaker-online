@@ -63,11 +63,14 @@ export class TestCreateComponent implements OnInit {
       .get(`/api/exercises?${queryParams.toString()}`)
       .subscribe((data) => {
         const exercises = (
-          data as {
-            id: number;
-            description: string;
-            name: string;
-          }[]
+          (data as {
+            exercises: {
+              id: number;
+              description: string;
+              name: string;
+            }[];
+            pages: number;
+          }).exercises
         ).map((exercise) => {
           return {
             ...exercise,

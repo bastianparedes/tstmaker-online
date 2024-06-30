@@ -30,12 +30,22 @@ export class ExercisesComponent implements OnInit {
   httpClient = inject(HttpClient);
 
   ngOnInit() {
+    const queryParams = new URLSearchParams();
+    queryParams.append('columns', 'id');
+    queryParams.append('columns', 'name');
+    queryParams.append('columns', 'description');
+    queryParams.append('columns', 'last_modified_date');
+
     this.httpClient
       .get(
-        '/api/exercises?columns=id&columns=name&columns=description&columns=last_modified_date'
+        `/api/exercises?${queryParams.toString()}`
       )
       .subscribe((data) => {
-        this.exercises = data as Exercise[];
+        const typedData = data as {
+          exercises: Exercise[];
+          pages: number;
+        };
+        this.exercises = typedData.exercises;
         this.exercises.forEach((exercise) => {
           const date = new Date(exercise.last_modified_date);
           const day = date.getDate();

@@ -22,9 +22,26 @@ class Full_exercise(flask_restful.Resource):
     
     def validate_ids(value):
       return int(value)
+    
+    def validate_page_number(value, field):
+      number = int(value)
+      if number <= 0:
+        raise ValueError(f"Value '{value}' in '{field}' must be positive integer")
+      return number
+    
+    def validate_items_per_page(value, field):
+      limit = 100
+      number = int(value)
+      if not number > 0:
+        raise ValueError(f"Value '{value}' in '{field}' must be positive integer")
+      if number > limit:
+        raise ValueError(f"Value '{value}' in '{field}' must be lower or equal to {limit}")
+      return number
 
     self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
     self.parser_get.add_argument('ids', type=validate_ids, action='append', location='args', required=False, default=[])
+    self.parser_get.add_argument('page_number', type=validate_page_number, action='append', location='args', required=False, default=1)
+    self.parser_get.add_argument('items_per_page', type=validate_items_per_page, action='append', location='args', required=False, default=100)
 
     self.parser_post.add_argument(db.Exercises.name.column_name, type=str, location='json', required=True)
     self.parser_post.add_argument(db.Exercises.description.column_name, type=str, location='json', required=True)
@@ -34,11 +51,19 @@ class Full_exercise(flask_restful.Resource):
     args = self.parser_get.parse_args()
     columns = list(set(args['columns']))
     ids = list(set(args['ids']))
-    query = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id)
+    page_number = args['page_number']
+    items_per_page = args['items_per_page']
+
+    exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id).paginate(page_number, items_per_page)
+    pages = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).count()
     if len(ids) != 0:
-      query = query.where(db.Exercises.id.in_(ids))
-    results = list(query.dicts())
-    return flask.jsonify(results)
+      exercises = exercises.where(db.Exercises.id.in_(ids))
+
+    print(exercises, flush=True)
+    return flask.jsonify({
+      'exercises': list(exercises.dicts()),
+      'pages': pages
+    })
 
   def post(self):
     args = self.parser_post.parse_args()
