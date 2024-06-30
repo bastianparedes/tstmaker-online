@@ -14,6 +14,7 @@ import { runPythonCode } from '../../utils/pyscript';
 import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../common/loader/loader.component';
+import { everyElementIsDifferent } from '../../utils/array';
 
 interface Exercises {
   id: number;
@@ -167,18 +168,20 @@ export class TestCreateComponent implements OnInit {
           alternatives: string[];
         }[] = [];
         for (const exercisePythonCodeData of exercisesPythonCodeData) {
+          const statements: unknown[] = [];
           for (let i = 0; i < exercisePythonCodeData.quantity; i++) {
-            for (let tryCount = 0 ; tryCount < 15 ; tryCount++) {
+            for (let tryCount = 0 ; tryCount < 30 ; tryCount++) {
               const exercise = await runPythonCode<{
                 alternatives: string[];
                 comparators: unknown[];
                 identifiers: unknown[];
                 statement: string;
               } | undefined>([classesPythonCode, exercisePythonCodeData.code].join('\n'));
-              if (exercise !== undefined) {
-                exercises.push(exercise);
-                break;
-              }
+              if (exercise === undefined) continue;
+              if (everyElementIsDifferent(exercise.comparators)) continue;
+
+              exercises.push(exercise);
+              break;
             }
             
           }

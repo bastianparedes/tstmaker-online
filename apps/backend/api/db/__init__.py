@@ -14,7 +14,7 @@ db = peewee.PostgresqlDatabase(
 )
 
 
-class Exercise(peewee.Model):
+class Exercises(peewee.Model):
   id = peewee.AutoField()
   name = peewee.TextField()
   description = peewee.TextField()
@@ -26,4 +26,4 @@ class Exercise(peewee.Model):
 
 
 db.connect()
-db.create_tables([Exercise])
+db.create_tables([Exercises])

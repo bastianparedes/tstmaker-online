@@ -29,6 +29,9 @@ def fn():
   n1 = Rational(n1_numerator, n1_denominator).simplify()
   n2 = Rational(n2_numerator, n2_denominator).simplify()
 
+  if n1 == n2 or n1.get_denominator() == 1 or n2.get_denominator() == 1:
+    return;
+
   math_expression = Latex.math_mode(f'{n1} + {n2}')
 
   return {
@@ -41,13 +44,13 @@ def fn():
       Latex.math_mode(n1 * n2 ** (-1))
     ],
     'comparators': [
-      n1 + n2,
-      Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator()),
-      Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator()),
-      n1 * n2,
-      n1 * n2 ** (-1)
+      float(n1 + n2),
+      float(Rational(n1.get_numerator() + n2.get_denominator(), n1.get_denominator() + n2.get_numerator())),
+      float(Rational(n1.get_denominator() + n2.get_numerator(), n1.get_numerator() + n2.get_denominator())),
+      float(n1 * n2),
+      float(n1 * n2 ** (-1))
     ],
-    'identifiers': [n1, n2]
+    'identifiers': [n1.get_numerator(), n1.get_denominator(), n2.get_numerator(), n2.get_numerator()]
   }
 `.trim();
 
@@ -97,9 +100,13 @@ export class ExerciseComponent implements OnInit {
       return;
     }
 
+    const queryParams = new URLSearchParams();
+    queryParams.append('columns', 'name');
+    queryParams.append('columns', 'description');
+    queryParams.append('columns', 'code');
     this.httpClient
       .get(
-        `/api/exercises/${this.id}?columns=name&columns=description&columns=code`
+        `/api/exercises/${this.id}?${queryParams.toString()}`
       )
       .pipe(
         catchError(() => {

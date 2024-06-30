@@ -1,4 +1,4 @@
-CREATE TABLE Exercise (
+CREATE TABLE Exercises (
   id SERIAL PRIMARY KEY NOT NULL,
   name TEXT DEFAULT '' NOT NULL,
   description TEXT DEFAULT '' NOT NULL,
