@@ -150,7 +150,7 @@ def pdf_url():
 
 @app.route('/api/classes', methods=['GET'])
 def get_classes():
-  with open('./api/classes/index.py', 'r') as file:
+  with open('./src/classes/index.py', 'r') as file:
     contenido = file.read()
     return flask.Response(contenido, content_type='text/plain'), 200
 

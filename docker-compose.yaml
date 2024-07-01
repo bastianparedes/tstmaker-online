@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: "12345678"
       POSTGRES_DB: "postgres"
     volumes:
-      - ./apps/backend/api/db/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+      - ./apps/backend/src/seed.sql:/docker-entrypoint-initdb.d/seed.sql
 
   frontend:
     build:
@@ -30,11 +30,13 @@ services:
       dockerfile: Dockerfile
     image: tstmaker/backend
     environment:
-      DATABASE_DB: "postgres"
-      DATABASE_HOST: "database"
-      DATABASE_PORT: "5432"
+      DATABASE_PROTOCOL: "postgres"
       DATABASE_USER: "postgres"
       DATABASE_PASSWORD: "12345678"
+      DATABASE_HOST: "database"
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: "postgres"
+      DATABASE_SSL_MODE: 'prefer'
     ports:
       - "5000:5000"
     depends_on:
