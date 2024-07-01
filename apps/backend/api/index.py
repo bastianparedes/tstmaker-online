@@ -5,8 +5,8 @@ import requests
 import datetime
 import db
 
-server = flask.Flask(__name__)
-api = flask_restful.Api(server)
+app = flask.Flask(__name__)
+api = flask_restful.Api(app)
 
 
 class Full_exercise(flask_restful.Resource):
@@ -134,7 +134,7 @@ class Specific_exercise(flask_restful.Resource):
 api.add_resource(Specific_exercise, '/api/exercises/<int:id>')
 
 
-@server.route('/api/pdf_url', methods=['POST'])
+@app.route('/api/pdf_url', methods=['POST'])
 def pdf_url():
   request_data = flask.request.get_json()
   latex_code = request_data['latex_code']
@@ -148,12 +148,12 @@ def pdf_url():
     })
   return response.url
 
-@server.route('/api/classes', methods=['GET'])
+@app.route('/api/classes', methods=['GET'])
 def get_classes():
   with open('./api/classes/index.py', 'r') as file:
     contenido = file.read()
     return flask.Response(contenido, content_type='text/plain'), 200
 
-@server.route('/api/health', methods=['GET'])
+@app.route('/api/health', methods=['GET'])
 def health():
   return flask.Response(False, content_type='text/plain'), 200
