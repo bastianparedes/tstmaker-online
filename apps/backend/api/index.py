@@ -2,8 +2,45 @@ import flask
 import flask_restful
 import flask_restful.reqparse
 import requests
+import dotenv
+import os
+import peewee
 import datetime
-import db
+
+dotenv.load_dotenv()
+
+DATABASE_PROTOCOL = os.environ.get('DATABASE_PROTOCOL')
+DATABASE_USER = os.environ.get('DATABASE_USER')
+DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD')
+DATABASE_HOST = os.environ.get('DATABASE_HOST')
+DATABASE_PORT = int(os.environ.get('DATABASE_PORT'))
+DATABASE_NAME = os.environ.get('DATABASE_NAME')
+DATABASE_SSL_MODE = os.environ.get('DATABASE_SSL_MODE', 'prefer')
+URI = f'{DATABASE_PROTOCOL}://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}?sslmode={DATABASE_SSL_MODE}'
+
+db = peewee.PostgresqlDatabase(
+  DATABASE_NAME,
+  host=DATABASE_HOST,
+  port=DATABASE_PORT,
+  user=DATABASE_USER,
+  password=DATABASE_PASSWORD,  # windows 12345, mac 12345678
+  sslmode=DATABASE_SSL_MODE
+)
+
+class Exercises(peewee.Model):
+  id = peewee.AutoField()
+  name = peewee.TextField()
+  description = peewee.TextField()
+  code = peewee.TextField()
+  last_modified_date = peewee.DateField(default=datetime.datetime.now)
+
+  class Meta:
+    database = db
+
+
+db.connect()
+db.create_tables([Exercises])
+
 
 app = flask.Flask(__name__)
 api = flask_restful.Api(app)
@@ -15,7 +52,7 @@ class Full_exercise(flask_restful.Resource):
     self.parser_post = flask_restful.reqparse.RequestParser()
 
     def validate_columns(value, field):
-      valid_columns = [db.Exercises.id.column_name, db.Exercises.name.column_name, db.Exercises.description.column_name, db.Exercises.code.column_name, db.Exercises.last_modified_date.column_name]
+      valid_columns = [Exercises.id.column_name, Exercises.name.column_name, Exercises.description.column_name, Exercises.code.column_name, Exercises.last_modified_date.column_name]
       if value not in valid_columns:
         raise ValueError(f"Value '{value}' in '{field}' is not one of valid values: {', '.join(valid_columns)}")
       return value
@@ -44,9 +81,9 @@ class Full_exercise(flask_restful.Resource):
     self.parser_get.add_argument('items_per_page', type=validate_items_per_page, location='args', required=False, default=100)
     self.parser_get.add_argument('query', type=str, location='args', required=False, default='')
 
-    self.parser_post.add_argument(db.Exercises.name.column_name, type=str, location='json', required=True)
-    self.parser_post.add_argument(db.Exercises.description.column_name, type=str, location='json', required=True)
-    self.parser_post.add_argument(db.Exercises.code.column_name, type=str, location='json', required=True)
+    self.parser_post.add_argument(Exercises.name.column_name, type=str, location='json', required=True)
+    self.parser_post.add_argument(Exercises.description.column_name, type=str, location='json', required=True)
+    self.parser_post.add_argument(Exercises.code.column_name, type=str, location='json', required=True)
 
   def get(self):
     args = self.parser_get.parse_args()
@@ -56,11 +93,11 @@ class Full_exercise(flask_restful.Resource):
     items_per_page = args['items_per_page']
     query = args['query']
 
-    exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id).paginate(page_number + 1, items_per_page).where(db.Exercises.name.contains(query) | db.Exercises.description.contains(query))
+    exercises = Exercises.select(*[getattr(Exercises, column) for column in columns]).order_by(Exercises.id).paginate(page_number + 1, items_per_page).where(Exercises.name.contains(query) | Exercises.description.contains(query))
     if len(ids) != 0:
-      exercises = exercises.where(db.Exercises.id.in_(ids))
+      exercises = exercises.where(Exercises.id.in_(ids))
 
-    total_exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).where(db.Exercises.name.contains(query) | db.Exercises.description.contains(query)).count()
+    total_exercises = Exercises.select(*[getattr(Exercises, column) for column in columns]).where(Exercises.name.contains(query) | Exercises.description.contains(query)).count()
 
     return flask.jsonify({
       'exercises': list(exercises.dicts()),
@@ -69,17 +106,17 @@ class Full_exercise(flask_restful.Resource):
 
   def post(self):
     args = self.parser_post.parse_args()
-    new_user = db.Exercises.create(
-        name=args[db.Exercises.name.column_name],
-        description=args[db.Exercises.description.column_name],
-        code=args[db.Exercises.code.column_name]
+    new_user = Exercises.create(
+        name=args[Exercises.name.column_name],
+        description=args[Exercises.description.column_name],
+        code=args[Exercises.code.column_name]
     )
 
     return {
-        db.Exercises.id.column_name: new_user.id,
-        db.Exercises.name.column_name: new_user.name,
-        db.Exercises.description.column_name: new_user.description,
-        db.Exercises.code.column_name: new_user.code
+        Exercises.id.column_name: new_user.id,
+        Exercises.name.column_name: new_user.name,
+        Exercises.description.column_name: new_user.description,
+        Exercises.code.column_name: new_user.code
     }
 
 api.add_resource(Full_exercise, '/api/exercises')
@@ -91,21 +128,21 @@ class Specific_exercise(flask_restful.Resource):
     self.parser_put = flask_restful.reqparse.RequestParser()
 
     def validate_columns(value, field):
-      valid_columns = [db.Exercises.id.column_name, db.Exercises.name.column_name, db.Exercises.description.column_name, db.Exercises.code.column_name, db.Exercises.last_modified_date.column_name]
+      valid_columns = [Exercises.id.column_name, Exercises.name.column_name, Exercises.description.column_name, Exercises.code.column_name, Exercises.last_modified_date.column_name]
       if value not in valid_columns:
         raise ValueError(f"Value '{value}' in '{field}' is not one of valid values: {', '.join(valid_columns)}")
       return value
     self.parser_get.add_argument('columns', type=validate_columns, action='append', location='args', required=True)
 
-    self.parser_put.add_argument(db.Exercises.name.column_name, type=str, location='json', required=True)
-    self.parser_put.add_argument(db.Exercises.description.column_name, type=str, location='json', required=True)
-    self.parser_put.add_argument(db.Exercises.code.column_name, type=str, location='json', required=True)
+    self.parser_put.add_argument(Exercises.name.column_name, type=str, location='json', required=True)
+    self.parser_put.add_argument(Exercises.description.column_name, type=str, location='json', required=True)
+    self.parser_put.add_argument(Exercises.code.column_name, type=str, location='json', required=True)
 
   def get(self, id: int):
     args = self.parser_get.parse_args()
     columns = list(set(args['columns']))
 
-    query = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).where(db.Exercises.id == id).limit(1)
+    query = Exercises.select(*[getattr(Exercises, column) for column in columns]).where(Exercises.id == id).limit(1)
     results = list(query.dicts())
     if len(results) != 1:
       return flask.jsonify({}), 404
@@ -113,22 +150,22 @@ class Specific_exercise(flask_restful.Resource):
 
   def put(self, id: int):
     args = self.parser_put.parse_args()
-    db.Exercises \
+    Exercises \
       .update({
-          db.Exercises.name: args[db.Exercises.name.column_name],
-          db.Exercises.description: args[db.Exercises.description.column_name],
-          db.Exercises.code: args[db.Exercises.code.column_name],
-          db.Exercises.last_modified_date: datetime.datetime.now()
+          Exercises.name: args[Exercises.name.column_name],
+          Exercises.description: args[Exercises.description.column_name],
+          Exercises.code: args[Exercises.code.column_name],
+          Exercises.last_modified_date: datetime.datetime.now()
       }) \
-        .where(db.Exercises.id == id) \
-        .returning(db.Exercises) \
+        .where(Exercises.id == id) \
+        .returning(Exercises) \
         .execute()
 
     return flask.jsonify({
-        db.Exercises.id.name: id,
-        db.Exercises.name.name: args[db.Exercises.name.column_name],
-        db.Exercises.description.name: args[db.Exercises.description.column_name],
-        db.Exercises.code.name: args[db.Exercises.code.column_name]
+        Exercises.id.name: id,
+        Exercises.name.name: args[Exercises.name.column_name],
+        Exercises.description.name: args[Exercises.description.column_name],
+        Exercises.code.name: args[Exercises.code.column_name]
     })
 
 api.add_resource(Specific_exercise, '/api/exercises/<int:id>')
