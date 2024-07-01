@@ -15,6 +15,8 @@ import { completeLatexCode, tableUniqueSelection } from '../../utils/latex';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../common/loader/loader.component';
 import { everyElementIsDifferent, arrayIncludesElement } from '../../utils/array';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import type { PageEvent } from '@angular/material/paginator';
 
 interface Exercises {
   id: number;
@@ -36,13 +38,23 @@ interface Exercises {
     MatInputModule,
     MatFormFieldModule,
     LoaderComponent,
+    MatPaginatorModule
   ],
 })
 export class TestCreateComponent implements OnInit {
   isLoading = {
-    initialLoad: true,
+    fetchingExercises: true,
     creatingPdf: false,
   };
+  filters = {
+    query: '',
+    itemsPerPage: 100,
+    itemsPerOptions: [10, 25, 50, 100],
+    page: 0,
+    totalPages: 1,
+    totalExercises: 0,
+  };
+  queryTimeout = NaN;
   isAtLeastOneExerciseSelectedWithQuantityNotZero = false;
   exercises = {
     unselected: [] as Exercises[],
@@ -54,32 +66,59 @@ export class TestCreateComponent implements OnInit {
 
   constructor(public sanitizer: DomSanitizer) {}
 
-  async ngOnInit() {
+  fetchExercises(query: string, page: number, pageSize: number) {
+    this.isLoading.fetchingExercises = true;
+
     const queryParams = new URLSearchParams();
     queryParams.append('columns', 'id');
     queryParams.append('columns', 'name');
     queryParams.append('columns', 'description');
+    queryParams.append('query', query);
+    queryParams.append('page_number', String(page));
+    queryParams.append('items_per_page', String(pageSize));
     this.httpClient
-      .get(`/api/exercises?${queryParams.toString()}`)
+      .get(
+        `/api/exercises?${queryParams.toString()}`
+      )
       .subscribe((data) => {
-        const exercises = (
-          (data as {
-            exercises: {
-              id: number;
-              description: string;
-              name: string;
-            }[];
-            pages: number;
-          }).exercises
-        ).map((exercise) => {
+        const typedData = data as {
+          exercises: {
+            id: number;
+            name: string;
+            description: string;
+          }[];
+          total: number;
+        };
+
+        const exercises = typedData.exercises.map((exercise) => {
           return {
             ...exercise,
             quantity: 0,
           };
         });
-        this.exercises.unselected = exercises;
-        this.isLoading.initialLoad = false;
+        this.filters.totalExercises = typedData.total;
+
+        const usedIds = this.exercises.selected.map((exercise) => exercise.id);
+        this.exercises.unselected = exercises.filter((exercise) => !usedIds.includes(exercise.id));
+
+        this.isLoading.fetchingExercises = false;
       });
+  }
+
+  async ngOnInit() {
+    this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+  }
+
+  handleQueryInput(event: Event) {
+    this.filters.query = (event.target as HTMLInputElement).value;
+    clearTimeout(this.queryTimeout);
+    this.queryTimeout = Number(setTimeout(() => {
+      this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+    }, 1000));
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.fetchExercises(this.filters.query, event.pageIndex, event.pageSize);
   }
 
   updateQuantityWithKeyboard(event: KeyboardEvent) {
@@ -97,6 +136,7 @@ export class TestCreateComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<Exercises[]>) {
+    console.log(event);
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,

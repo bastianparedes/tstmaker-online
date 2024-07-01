@@ -1,4 +1,4 @@
-@if (isLoading.initialLoad || isLoading.creatingPdf) {
+@if (isLoading.fetchingExercises || isLoading.creatingPdf) {
   <app-loader></app-loader>
 }
 
@@ -13,6 +13,25 @@
     ">
     Create test
   </button>
+  <div class="flex justify-between">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" [disabled]="this.isLoading.fetchingExercises" (input)="this.handleQueryInput($event)" />
+    </mat-form-field>
+    <mat-paginator
+      #paginator
+      (page)="handlePageEvent($event)"
+      [length]="this.filters.totalExercises"
+      [disabled]="this.isLoading.fetchingExercises"
+      [showFirstLastButtons]="true"
+      [pageSize]="this.filters.itemsPerPage"
+      [pageSizeOptions]="this.filters.itemsPerOptions"
+      [hidePageSize]="false"
+      [pageIndex]="this.filters.page"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
   <div class="flex gap-10">
     <div class="flex-1">
       <h2>Available</h2>
