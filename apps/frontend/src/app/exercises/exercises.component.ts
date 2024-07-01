@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import type { PageEvent } from '@angular/material/paginator';
 import { LoaderComponent } from '../common/loader/loader.component';
-
+import { MatInputModule } from '@angular/material/input';
 
 
 interface Exercise {
@@ -20,7 +20,7 @@ interface Exercise {
   selector: 'app-exercises',
   templateUrl: './exercises.component.html',
   standalone: true,
-  imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule, MatPaginatorModule, LoaderComponent],
+  imports: [MatTableModule, MatCheckboxModule, HttpClientModule, MatIconModule, MatPaginatorModule, LoaderComponent, MatInputModule],
 })
 export class ExercisesComponent implements OnInit {
   isLoading = true;
