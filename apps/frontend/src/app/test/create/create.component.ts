@@ -140,7 +140,6 @@ export class TestCreateComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<Exercises[]>) {
-    console.log(event);
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
