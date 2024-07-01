@@ -6,13 +6,13 @@
     <div class="flex justify-between">
       <mat-form-field>
         <mat-label>Filter</mat-label>
-        <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" (input)="this.handleQueryInput($event)" />
+        <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" [disabled]="this.isLoading" (input)="this.handleQueryInput($event)" />
       </mat-form-field>
       <mat-paginator
         #paginator
         (page)="handlePageEvent($event)"
         [length]="this.filters.totalExercises"
-        [disabled]="false"
+        [disabled]="this.isLoading"
         [showFirstLastButtons]="true"
         [pageSize]="this.filters.itemsPerPage"
         [pageSizeOptions]="this.filters.itemsPerOptions"
