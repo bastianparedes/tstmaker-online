@@ -35,7 +35,7 @@ export class ExercisesComponent implements OnInit {
   httpClient = inject(HttpClient);
   filters = {
     query: '',
-    itemsPerPage: 100,
+    itemsPerPage: 25,
     itemsPerOptions: [10, 25, 50, 100],
     page: 0,
     totalPages: 1,
@@ -71,6 +71,9 @@ export class ExercisesComponent implements OnInit {
           const year = date.getFullYear();
           exercise.last_modified_date = `${day}/${month}/${year}`;
         });
+
+        this.filters.page = page;
+        this.filters.itemsPerPage = pageSize;
         this.filters.totalExercises = typedData.total;
         this.isLoading = false;
       });
@@ -78,6 +81,9 @@ export class ExercisesComponent implements OnInit {
 
   ngOnInit() {
     this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+    setTimeout(() => {
+      this.filters.page = 0
+    }, 1000);
   }
 
   handlePageEvent(event: PageEvent) {
@@ -88,7 +94,7 @@ export class ExercisesComponent implements OnInit {
     this.filters.query = (event.target as HTMLInputElement).value;
     clearTimeout(this.queryTimeout);
     this.queryTimeout = Number(setTimeout(() => {
-      this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+      this.fetchExercises(this.filters.query, 0, this.filters.itemsPerPage);
     }, 1000));
   }
 }
