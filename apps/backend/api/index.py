@@ -93,9 +93,13 @@ class Full_exercise(flask_restful.Resource):
     items_per_page = args['items_per_page']
     query = args['query']
 
-    exercises = Exercises.select(*[getattr(Exercises, column) for column in columns]).order_by(Exercises.id).paginate(page_number + 1, items_per_page).where(Exercises.name.contains(query) | Exercises.description.contains(query))
+    exercises = Exercises.select(*[getattr(Exercises, column) for column in columns])
     if len(ids) != 0:
       exercises = exercises.where(Exercises.id.in_(ids))
+    else:
+      exercises = exercises.order_by(Exercises.id)
+      exercises = exercises.paginate(page_number + 1, items_per_page)
+      exercises = exercises.where(Exercises.name.contains(query) | Exercises.description.contains(query))
 
     total_exercises = Exercises.select(*[getattr(Exercises, column) for column in columns]).where(Exercises.name.contains(query) | Exercises.description.contains(query)).count()
 
