@@ -6,7 +6,7 @@
     <div class="flex justify-between">
       <mat-form-field>
         <mat-label>Filter</mat-label>
-        <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" />
+        <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" (input)="this.handleQueryInput($event)" />
       </mat-form-field>
       <mat-paginator
         #paginator

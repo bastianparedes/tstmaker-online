@@ -41,6 +41,7 @@ export class ExercisesComponent implements OnInit {
     totalPages: 1,
     totalExercises: 0,
   };
+  queryTimeout = NaN;
 
   fetchExercises(query: string, page: number, pageSize: number) {
     this.isLoading = true;
@@ -80,6 +81,14 @@ export class ExercisesComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this.fetchExercises('', event.pageIndex, event.pageSize);
+    this.fetchExercises(this.filters.query, event.pageIndex, event.pageSize);
+  }
+
+  handleQueryInput(event: Event) {
+    this.filters.query = (event.target as HTMLInputElement).value;
+    clearTimeout(this.queryTimeout);
+    this.queryTimeout = Number(setTimeout(() => {
+      this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+    }, 1000));
   }
 }
