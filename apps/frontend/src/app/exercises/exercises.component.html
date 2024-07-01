@@ -1,5 +1,23 @@
-<div class="flex justify-center p-5">
+@if (this.isLoading) {
+  <app-loader />
+}
+<div class="flex flex-col justify-center p-5">
   @if (exercises !== undefined) {
+    <mat-paginator
+      #paginator
+      (page)="handlePageEvent($event)"
+      [length]="this.filters.totalExercises"
+      [disabled]="false"
+      [showFirstLastButtons]="true"
+      [pageSize]="this.filters.itemsPerPage"
+      [pageSizeOptions]="this.filters.itemsPerOptions"
+      [hidePageSize]="false"
+      [pageIndex]="this.filters.page"
+      aria-label="Select page"
+
+      firstPageLabel="hola"
+    >
+    </mat-paginator>
     <table
       class="w-full"
       mat-table

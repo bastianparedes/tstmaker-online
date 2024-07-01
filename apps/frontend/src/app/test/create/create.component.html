@@ -17,7 +17,7 @@
     <div class="flex-1">
       <h2>Available</h2>
       <div
-        id="exercises"
+        id="exercisesUnselected"
         cdkDropList
         [cdkDropListData]="exercises.unselected"
         cdkDropListConnectedTo="exercisesSelected"
@@ -38,14 +38,14 @@
         }
       </div>
     </div>
-    <div class="flex-1">
+    <div class="flex flex-col flex-1">
       <h2>Selected</h2>
       <div
         id="exercisesSelected"
         cdkDropList
         [cdkDropListData]="exercises.selected"
         cdkDropListConnectedTo="exercises"
-        class="border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden block"
+        class="flex-1 border-solid border-2 border-gray-500 min-h-14 bg-white rounded-md overflow-hidden"
         (cdkDropListDropped)="drop($event)">
         @for (exercise of exercises.selected; track exercise.id) {
           <div
