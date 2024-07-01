@@ -156,4 +156,4 @@ def get_classes():
 
 @server.route('/api/health', methods=['GET'])
 def health():
-  return flask.Response(True, content_type='text/plain'), 200
+  return flask.Response(False, content_type='text/plain'), 200
