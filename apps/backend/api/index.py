@@ -42,6 +42,7 @@ class Full_exercise(flask_restful.Resource):
     self.parser_get.add_argument('ids', type=validate_ids, action='append', location='args', required=False, default=[])
     self.parser_get.add_argument('page_number', type=validate_page_number, location='args', required=False, default=1)
     self.parser_get.add_argument('items_per_page', type=validate_items_per_page, location='args', required=False, default=100)
+    self.parser_get.add_argument('query', type=str, location='args', required=False, default='')
 
     self.parser_post.add_argument(db.Exercises.name.column_name, type=str, location='json', required=True)
     self.parser_post.add_argument(db.Exercises.description.column_name, type=str, location='json', required=True)
@@ -53,12 +54,13 @@ class Full_exercise(flask_restful.Resource):
     ids = list(set(args['ids']))
     page_number = args['page_number']
     items_per_page = args['items_per_page']
+    query = args['query']
 
-    exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id).paginate(page_number + 1, items_per_page)
+    exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).order_by(db.Exercises.id).paginate(page_number + 1, items_per_page).where(db.Exercises.name.contains(query) | db.Exercises.description.contains(query))
     if len(ids) != 0:
       exercises = exercises.where(db.Exercises.id.in_(ids))
 
-    total_exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).count()
+    total_exercises = db.Exercises.select(*[getattr(db.Exercises, column) for column in columns]).where(db.Exercises.name.contains(query) | db.Exercises.description.contains(query)).count()
 
     return flask.jsonify({
       'exercises': list(exercises.dicts()),
