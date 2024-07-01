@@ -153,3 +153,7 @@ def get_classes():
   with open('./api/classes/index.py', 'r') as file:
     contenido = file.read()
     return flask.Response(contenido, content_type='text/plain'), 200
+
+@server.route('/api/health', methods=['GET'])
+def health():
+  return flask.Response(True, content_type='text/plain'), 200
