@@ -81,9 +81,6 @@ export class ExercisesComponent implements OnInit {
 
   ngOnInit() {
     this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
-    setTimeout(() => {
-      this.filters.page = 0
-    }, 1000);
   }
 
   handlePageEvent(event: PageEvent) {

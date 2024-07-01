@@ -73,6 +73,7 @@ export class TestCreateComponent implements OnInit {
     queryParams.append('columns', 'id');
     queryParams.append('columns', 'name');
     queryParams.append('columns', 'description');
+    queryParams.append('columns', 'last_modified_date');
     queryParams.append('query', query);
     queryParams.append('page_number', String(page));
     queryParams.append('items_per_page', String(pageSize));
@@ -101,6 +102,9 @@ export class TestCreateComponent implements OnInit {
         const usedIds = this.exercises.selected.map((exercise) => exercise.id);
         this.exercises.unselected = exercises.filter((exercise) => !usedIds.includes(exercise.id));
 
+        this.filters.page = page;
+        this.filters.itemsPerPage = pageSize;
+        this.filters.totalExercises = typedData.total;
         this.isLoading.fetchingExercises = false;
       });
   }
@@ -113,7 +117,7 @@ export class TestCreateComponent implements OnInit {
     this.filters.query = (event.target as HTMLInputElement).value;
     clearTimeout(this.queryTimeout);
     this.queryTimeout = Number(setTimeout(() => {
-      this.fetchExercises(this.filters.query, this.filters.page, this.filters.itemsPerPage);
+      this.fetchExercises(this.filters.query, 0, this.filters.itemsPerPage);
     }, 1000));
   }
 
