@@ -186,19 +186,21 @@ export class TestCreateComponent implements OnInit {
         queryParams.append('ids', String(exerciseSelected.id))
       );
       this.httpClient
-        .get<
-          {
-            id: number;
-            code: string;
-          }[]
-        >(`/api/exercises?${queryParams.toString()}`)
-        .subscribe((exercises) => {
+        .get(`/api/exercises?${queryParams.toString()}`)
+        .subscribe((data) => {
+          const typedData = data as {
+            exercises: {
+              id: number;
+              code: string;
+            }[];
+            total: number;
+          };
           const completeDatas: {
             id: number;
             code: string;
             quantity: number;
           }[] = [];
-          for (const exercise of exercises) {
+          for (const exercise of typedData.exercises) {
             const quantity = exercisesSelected.find(
               (exerciseSelected) => exerciseSelected.id === exercise.id
             )?.quantity;
